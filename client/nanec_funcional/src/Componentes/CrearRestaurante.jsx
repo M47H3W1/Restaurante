@@ -1,20 +1,50 @@
 import { useNavigate } from "react-router-dom";
-//import { Link  } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { ENDPOINTS } from '../config/endpoints';
+
 function CrearRestaurante (props){
-   
+    const [tipos, setTipos] = useState([]);
+
+    useEffect(() => {
+        axios.get(ENDPOINTS.TIPO_COMIDA)
+            .then(res => setTipos(res.data))
+            .catch(err => setTipos([]));
+    }, []);
+
     const handlerInsertar = () => {
         const nuevoRestaurante = {
             nombre: props.state.nombre,
             direccion: props.state.direccion,
-            tipo: props.state.tipo,
             reputacion: props.state.reputacion,
-            UrlImagen: props.state.UrlImagen
+            url: props.state.UrlImagen
         };
 
-        props.agregarRestaurante(nuevoRestaurante);
-        alert("Restaurante creado exitosamente");
-        //Se limpia el formulario
-        (props.setState({nombre:"", direccion:"", tipo:"", reputacion:"", UrlImagen:""}))
+        axios.post(ENDPOINTS.RESTAURANTES, nuevoRestaurante)
+            .then(res => {
+                console.log("📦 Respuesta al crear restaurante:", res.data); // <-- Depuración
+                const restauranteCreado = res.data.data; // <-- Aquí está el restaurante
+                const restauranteId = restauranteCreado._id || restauranteCreado.id;
+                if (!restauranteId) {
+                    alert("No se pudo obtener el ID del restaurante creado. Revisa la respuesta del backend.");
+                    throw new Error("ID de restaurante no encontrado en la respuesta");
+                }
+                const registroMenu = {
+                    restaurante_id: restauranteId,
+                    tipoComidaId: props.state.tipo
+                };
+                console.log("📝 Registro de menú a insertar:", registroMenu);
+                return axios.post(ENDPOINTS.MENU, registroMenu);
+            })
+            .then(() => {
+                alert("Restaurante y menú creados exitosamente");
+                props.agregarRestaurante(nuevoRestaurante);
+                props.setState({nombre:"", direccion:"", tipo:"", reputacion:"", UrlImagen:""});
+            })
+            .catch(err => {
+                alert("Error al crear restaurante o menú");
+                console.error(err);
+            });
     }
 
     const navigate = useNavigate();
@@ -53,11 +83,11 @@ function CrearRestaurante (props){
                 onChange={(e) => props.setState({ ...props.state, tipo: e.target.value })}
             >
                 <option value="">Seleccione un tipo</option>
-                <option value="Tradicional">Tradicional</option>
-                <option value="Cafeteria">Cafeteria</option>
-                <option value="Desayunos">Desayunos</option>
-                <option value="Vegana">Vegana</option>
-                <option value="Vegetariana">Vegetariana</option>
+                {tipos.map((tipo, idx) => (
+                    <option key={idx} value={tipo.id || tipo._id}>
+                        {tipo.nombre || tipo.tipo || tipo}
+                    </option>
+                ))}
             </select>
             <label>Reputación:</label>
             <input type="number" value={props.state.reputacion} onChange={(e) => props.setState({...props.state, reputacion: e.target.value})} />

@@ -2,12 +2,13 @@
     background-color: #f8f4e3;
     border-radius: 12px;
     box-shadow: 0 4px 16px rgba(100, 60, 10, 0.15);
-    width: 400px;
+    max-width: 500px; /* Cambiar width fijo por max-width */
+    width: 90%; /* Responsive */
     margin: 40px auto;
     padding: 32px 24px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: stretch; /* Cambiar de center a stretch para que los elementos ocupen todo el ancho */
 }
 
 .ActualizarRestaurante label {
@@ -15,32 +16,99 @@
     margin-bottom: 4px;
     font-weight: bold;
     align-self: flex-start;
+    color: #5a4a2a;
 }
 
 .ActualizarRestaurante input,
 .ActualizarRestaurante select {
     width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
+    padding: 10px 12px; /* Más padding para mejor usabilidad */
+    margin-bottom: 15px; /* Más espacio entre campos */
     border-radius: 6px;
     border: 1px solid #bfa76f;
     font-size: 1rem;
     background: #fffbe6;
+    box-sizing: border-box; /* Importante para que el padding no afecte el ancho */
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.ActualizarRestaurante input:focus,
+.ActualizarRestaurante select:focus {
+    outline: none;
+    border-color: #c4891b;
+    box-shadow: 0 0 0 2px rgba(196, 137, 27, 0.2);
 }
 
 .ActualizarRestaurante button {
     margin-top: 14px;
     margin-right: 8px;
-    padding: 8px 18px;
+    margin-bottom: 8px; /* Agregar margen inferior */
+    padding: 12px 20px; /* Más padding para botones más grandes */
     border: none;
     border-radius: 6px;
     background-color: #c4891b;
     color: #fff;
     font-weight: bold;
+    font-size: 1rem;
     cursor: pointer;
-    transition: background 0.2s;
+    transition: all 0.2s ease;
+    min-width: 120px; /* Ancho mínimo para botones consistentes */
 }
 
 .ActualizarRestaurante button:hover {
     background-color: #a06c13;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(100, 60, 10, 0.2);
+}
+
+.ActualizarRestaurante button:active {
+    transform: translateY(0);
+}
+
+/* Estilos para la vista previa de imagen */
+.ActualizarRestaurante .imagen-preview {
+    margin: 15px 0;
+    text-align: center;
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #e0d0a0;
+}
+
+.ActualizarRestaurante .imagen-preview img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 6px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Contenedor para botones de navegación */
+.ActualizarRestaurante .botones-navegacion {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    justify-content: center;
+}
+
+.ActualizarRestaurante .botones-navegacion button {
+    margin: 0;
+    flex: 1;
+    max-width: 150px;
+}
+
+/* Responsive para pantallas pequeñas */
+@media (max-width: 480px) {
+    .ActualizarRestaurante {
+        margin: 20px auto;
+        padding: 20px 16px;
+        width: 95%;
+    }
+    
+    .ActualizarRestaurante .botones-navegacion {
+        flex-direction: column;
+    }
+    
+    .ActualizarRestaurante .botones-navegacion button {
+        max-width: none;
+    }
 }

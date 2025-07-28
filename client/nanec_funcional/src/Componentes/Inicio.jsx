@@ -1,6 +1,6 @@
 import {useNavigate} from 'react-router-dom';
 //import { Link } from 'react-router-dom';
-function Incio() {
+function Inicio() {
     const navigate = useNavigate();
     const handleLista=()=> {
         navigate("/lista");
@@ -12,7 +12,6 @@ function Incio() {
     <div className="Inicio">
     <h1>
         Bienvenido a la Aplicación de Restaurantes
-     
     </h1>
     {/*<p>Se utiliza el hook useNavigate</p>*/}
     <button onClick={handleLista}>Ver lista de restaurantes</button>
@@ -32,4 +31,4 @@ function Incio() {
   );
 }
 
-export default Incio;
+export default Inicio;

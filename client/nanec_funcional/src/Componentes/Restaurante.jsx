@@ -4,6 +4,7 @@ import "./Restaurante_.css";
 function Restaurante (props){
     
     const {id, nombre, direccion, tipo, UrlImagen, SumarLikes,RestarDislikes, reputacion, index, handleEliminar}= props;
+    const {tipos} = props;
 
     const [preferencias, setPreferencias] = useState({
         likes: 0,
@@ -68,6 +69,31 @@ function Restaurante (props){
             <h4>Reputación: {estrellas()}</h4>
             <h4>Me gusta:{preferencias.likes}</h4>
             <h4>No me gusta:{preferencias.dislikes}</h4>
+            <div>
+                <strong>Tipos:</strong>{" "}
+                {tipos && tipos.length > 0 ? (
+                <span>
+                    {tipos.map((tipo, idx) => (
+                    <span
+                        key={idx}
+                        style={{
+                        background: "#ffe082",
+                        color: "#6d4c00",
+                        borderRadius: "12px",
+                        padding: "2px 10px",
+                        fontSize: "0.95em",
+                        border: "1px solid #e0b800",
+                        marginRight: "5px"
+                        }}
+                    >
+                        {tipo}
+                    </span>
+                    ))}
+                </span>
+                ) : (
+                <span style={{ color: "#888" }}>Sin tipo</span>
+                )}
+            </div>
             <button onClick={handlerLike}>👍</button>
             <button onClick={handlerDislike}>👎</button>
             <div className="botones-acciones">
