@@ -87,15 +87,15 @@ app.delete("/restaurantes/:id", (request, response)=> {
  const app = express();
  const port = 8000;
  ///require('./server/config/mongoose.config')
-require('./server_mysql/config/sequelize.config.js'); // Importar la configuración de Sequelize
+require('./server/config/sequelize.config.js'); // Importar la configuración de Sequelize
 // app.use(cors()); // Habilitar CORS para todas las rutas
  app.use(cors());
  app.use(express.json()); // Middleware para parsear JSON en el cuerpo de la solicitud
  app.use(express.urlencoded({ extended: true })); // Middleware para parsear datos de formularios
  //const allRestauranteRoutes = require('./server/routes/restaurante.routes');
- const allRestauranteRoutes = require('./server_mysql/routes/restaurante.routes');
- const allTipoComidaRoutes = require('./server_mysql/routes/tipoComida.routes');
- const allMenuRoutes = require('./server_mysql/routes/menu.routes');
+ const allRestauranteRoutes = require('./server/routes/restaurante.routes');
+ const allTipoComidaRoutes = require('./server/routes/tipoComida.routes');
+ const allMenuRoutes = require('./server/routes/menu.routes');
  allRestauranteRoutes(app);
  allTipoComidaRoutes(app); 
  allMenuRoutes(app); 
