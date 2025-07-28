@@ -1,0 +1,72 @@
+.LoginContainer {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.LoginForm {
+  background: #262a36;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(20,20,30,0.18);
+  padding: 40px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 340px;
+  max-width: 95vw;
+  animation: fadeInUp 0.7s;
+}
+
+.LoginForm h2 {
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.LoginForm label {
+  color: var(--color-muted);
+  font-weight: 500;
+  margin-bottom: 6px;
+  align-self: flex-start;
+}
+
+.LoginForm input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  background: #323645;
+  color: var(--color-text);
+  margin-bottom: 18px;
+  font-size: 1rem;
+  transition: box-shadow 0.2s;
+}
+
+.LoginForm input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.LoginForm button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.LoginForm .mensaje {
+  color: var(--color-danger);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.LoginForm .register-link {
+  margin-top: 18px;
+  color: var(--color-accent);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1rem;
+  background: none;
+  border: none;
+}

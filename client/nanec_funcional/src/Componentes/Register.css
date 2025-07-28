@@ -1,0 +1,116 @@
+.RegisterContainer {
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.RegisterForm {
+  background: #262a36;
+  border-radius: 18px;
+  box-shadow: 0 6px 32px rgba(20,20,30,0.18);
+  padding: 40px 32px 32px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 340px;
+  max-width: 95vw;
+  animation: fadeInUp 0.7s;
+}
+
+.RegisterForm h2 {
+  color: var(--color-primary);
+  margin-bottom: 24px;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.RegisterForm label {
+  color: var(--color-muted);
+  font-weight: 500;
+  margin-bottom: 6px;
+  align-self: flex-start;
+}
+
+.RegisterForm input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: none;
+  background: #323645;
+  color: var(--color-text);
+  margin-bottom: 18px;
+  font-size: 1rem;
+  transition: box-shadow 0.2s;
+}
+
+.RegisterForm input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.RegisterForm .input-group {
+  position: relative;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.RegisterForm .input-group input {
+  width: 100%;
+  padding: 12px 40px 12px 16px; /* Igual que el input normal pero con espacio a la derecha */
+  border-radius: 12px;
+  border: none;
+  background: #323645;
+  color: var(--color-text);
+  font-size: 1rem;
+  transition: box-shadow 0.2s;
+  margin-bottom: 0;
+  box-sizing: border-box;
+  height: 48px;
+  line-height: 1.5;
+}
+
+.RegisterForm .input-group input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
+
+.RegisterForm .toggle-password {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 1.25em;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  height: 24px;
+  width: 24px;
+  justify-content: center;
+}
+
+.RegisterForm button[type="submit"] {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.RegisterForm .mensaje {
+  color: var(--color-danger);
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.RegisterForm .register-link {
+  margin-top: 18px;
+  color: var(--color-accent);
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 1rem;
+  background: none;
+  border: none;
+}

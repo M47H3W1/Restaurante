@@ -111,3 +111,24 @@ label {
   background: var(--color-primary);
   border-radius: 8px;
 }
+
+/* Centrado para la página de inicio */
+.Inicio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 70vh;
+  width: 100%;
+  gap: 24px;
+}
+
+.Inicio h1 {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.Inicio button {
+  width: 270px;
+  margin-bottom: 12px;
+}

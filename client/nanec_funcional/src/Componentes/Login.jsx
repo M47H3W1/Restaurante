@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ENDPOINTS } from "../config/endpoints";
 import { useNavigate } from "react-router-dom";
+import "./Login.css";
 
 function Login({ setAuth }) {
   const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ function Login({ setAuth }) {
       const res = await axios.post(ENDPOINTS.LOGIN, { email, password });
       localStorage.setItem("token", res.data.token);
       setAuth({ user: res.data, token: res.data.token });
-      setMensaje("Login exitoso");
+      setMensaje("");
       navigate("/lista");
     } catch (err) {
       setMensaje("Credenciales inválidas");
@@ -23,15 +24,37 @@ function Login({ setAuth }) {
   };
 
   return (
-    <div>
-      <h2>Iniciar Sesión</h2>
-      <form onSubmit={handleLogin}>
-        <input type="email" placeholder="Correo" value={email} onChange={e => setEmail(e.target.value)} required />
-        <input type="password" placeholder="Contraseña" value={password} onChange={e => setPassword(e.target.value)} required />
+    <div className="LoginContainer">
+      <form className="LoginForm" onSubmit={handleLogin}>
+        <h2>Iniciar Sesión</h2>
+        {mensaje && <div className="mensaje">{mensaje}</div>}
+        <label htmlFor="email">Correo</label>
+        <input
+          id="email"
+          type="email"
+          placeholder="Correo"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <label htmlFor="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
         <button type="submit">Ingresar</button>
+        <button
+          type="button"
+          className="register-link"
+          onClick={() => navigate("/register")}
+        >
+          ¿No tienes cuenta? Regístrate
+        </button>
       </form>
-      {mensaje && <p>{mensaje}</p>}
-      <button onClick={() => navigate("/register")}>Registrarse</button>
     </div>
   );
 }
