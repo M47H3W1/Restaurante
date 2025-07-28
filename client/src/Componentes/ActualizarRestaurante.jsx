@@ -20,6 +20,7 @@ function ActualizarRestaurante(props) {
         reputacion: "",
         UrlImagen: ""
     });
+    const [restauranteOriginal, setRestauranteOriginal] = useState(null); // Para comparar cambios
 
     // Cargar tipos disponibles al montar el componente
     useEffect(() => {
@@ -36,12 +37,14 @@ function ActualizarRestaurante(props) {
             axios.get(`${ENDPOINTS.RESTAURANTES}/${id}`)
                 .then(response => {
                     const data = response.data;
-                    setRestaurante({
+                    const restauranteData = {
                         nombre: data.nombre || "",
                         direccion: data.direccion || "",
                         reputacion: data.reputacion || "",
                         UrlImagen: data.UrlImagen || data.url || ""
-                    });
+                    };
+                    setRestaurante(restauranteData);
+                    setRestauranteOriginal(restauranteData); // Guardar datos originales
                 })
                 .catch(error => {
                     console.error('Error al obtener el restaurante:', error);
@@ -86,22 +89,10 @@ function ActualizarRestaurante(props) {
             return;
         }
 
-        const restauranteActualizado = {
-            nombre: restaurante.nombre.trim(),
-            direccion: restaurante.direccion.trim(),
-            reputacion: parseInt(restaurante.reputacion) || 1,
-            url: (restaurante.UrlImagen || "").trim()
-        };
+        console.log("Iniciando actualización...");
 
-        console.log("Iniciando actualización del restaurante...");
-
-        // Paso 1: Actualizar restaurante
-        axios.put(`${ENDPOINTS.RESTAURANTES}/${id}`, restauranteActualizado)
-            .then(() => {
-                console.log("Restaurante actualizado, gestionando relaciones de tipos...");
-                // Paso 2: Obtener relaciones actuales
-                return axios.get(`${ENDPOINTS.MENU}`);
-            })
+        // Paso 1: Obtener relaciones actuales para comparar
+        axios.get(`${ENDPOINTS.MENU}`)
             .then(response => {
                 const menusExistentes = response.data.filter(menu => 
                     String(menu.restaurante_id || menu.restauranteId) === String(id)
@@ -113,61 +104,113 @@ function ActualizarRestaurante(props) {
                 console.log("Tipos existentes:", tiposExistentes);
                 console.log("Tipos nuevos seleccionados:", tiposNuevos);
                 
-                // Encontrar tipos a eliminar (están en existentes pero no en nuevos)
-                const tiposAEliminar = tiposExistentes.filter(tipo => !tiposNuevos.includes(tipo));
-                // Encontrar tipos a agregar (están en nuevos pero no en existentes)
-                const tiposAAgregar = tiposNuevos.filter(tipo => !tiposExistentes.includes(tipo));
+                // Verificar si hay cambios en los tipos
+                const tiposHanCambiado = JSON.stringify(tiposExistentes.sort()) !== JSON.stringify(tiposNuevos.sort());
                 
-                console.log("Tipos a eliminar:", tiposAEliminar);
-                console.log("Tipos a agregar:", tiposAAgregar);
+                // Verificar si hay cambios en los datos del restaurante
+                const restauranteActualizado = {
+                    nombre: restaurante.nombre.trim(),
+                    direccion: restaurante.direccion.trim(),
+                    reputacion: parseInt(restaurante.reputacion) || 1,
+                    url: (restaurante.UrlImagen || "").trim()
+                };
+
+                const restauranteOriginalFormatted = {
+                    nombre: restauranteOriginal?.nombre?.trim() || "",
+                    direccion: restauranteOriginal?.direccion?.trim() || "",
+                    reputacion: parseInt(restauranteOriginal?.reputacion) || 1,
+                    url: (restauranteOriginal?.UrlImagen || "").trim()
+                };
+
+                const restauranteHaCambiado = JSON.stringify(restauranteActualizado) !== JSON.stringify(restauranteOriginalFormatted);
                 
-                const promesas = [];
-                
-                // Eliminar relaciones que ya no se necesitan
-                if (tiposAEliminar.length > 0) {
-                    const menusAEliminar = menusExistentes.filter(menu => 
-                        tiposAEliminar.includes(String(menu.tipoComidaId))
+                console.log("Restaurante ha cambiado:", restauranteHaCambiado);
+                console.log("Tipos han cambiado:", tiposHanCambiado);
+
+                const promesasActualizacion = [];
+
+                // Solo actualizar restaurante si hay cambios en los datos básicos
+                if (restauranteHaCambiado) {
+                    console.log("Actualizando datos del restaurante...");
+                    promesasActualizacion.push(
+                        axios.put(`${ENDPOINTS.RESTAURANTES}/${id}`, restauranteActualizado)
+                            .then(() => console.log("Restaurante actualizado exitosamente"))
+                            .catch(error => {
+                                console.error("Error al actualizar restaurante:", error);
+                                throw new Error(`Error al actualizar restaurante: ${error.response?.data?.message || error.message}`);
+                            })
                     );
+                } else {
+                    console.log("No hay cambios en los datos del restaurante");
+                }
+
+                // Solo actualizar tipos si han cambiado
+                if (tiposHanCambiado) {
+                    console.log("Los tipos han cambiado, actualizando relaciones...");
                     
-                    menusAEliminar.forEach(menu => {
-                        const menuId = menu.id || menu._id;
-                        console.log("Eliminando relación:", menuId, "tipo:", menu.tipoComidaId);
-                        promesas.push(
-                            axios.delete(`${ENDPOINTS.MENU}/${menuId}`)
-                                .then(() => console.log("Relación eliminada:", menuId))
+                    // Encontrar tipos a eliminar y agregar
+                    const tiposAEliminar = tiposExistentes.filter(tipo => !tiposNuevos.includes(tipo));
+                    const tiposAAgregar = tiposNuevos.filter(tipo => !tiposExistentes.includes(tipo));
+                    
+                    console.log("Tipos a eliminar:", tiposAEliminar);
+                    console.log("Tipos a agregar:", tiposAAgregar);
+                    
+                    // Eliminar relaciones obsoletas
+                    if (tiposAEliminar.length > 0) {
+                        const menusAEliminar = menusExistentes.filter(menu => 
+                            tiposAEliminar.includes(String(menu.tipoComidaId))
+                        );
+                        
+                        menusAEliminar.forEach(menu => {
+                            const menuId = menu.id || menu._id;
+                            
+                            if (!menuId) {
+                                console.error("Menu sin ID válido:", menu);
+                                return;
+                            }
+                            
+                            console.log("Eliminando relación:", menuId, "tipo:", menu.tipoComidaId);
+                            promesasActualizacion.push(
+                                axios.delete(`${ENDPOINTS.MENU}/${menuId}`)
+                                    .then(() => console.log("Relación eliminada:", menuId))
+                                    .catch(error => {
+                                        console.error("Error al eliminar relación:", menuId, error);
+                                        console.warn("Continuando con otras operaciones...");
+                                    })
+                            );
+                        });
+                    }
+                    
+                    // Agregar nuevas relaciones
+                    if (tiposAAgregar.length > 0) {
+                        tiposAAgregar.forEach(tipoId => {
+                            console.log("Creando nueva relación para tipo:", tipoId);
+                            promesasActualizacion.push(
+                                axios.post(ENDPOINTS.MENU, {
+                                    restaurante_id: parseInt(id),
+                                    tipoComidaId: parseInt(tipoId)
+                                })
+                                .then(() => console.log("Nueva relación creada para tipo:", tipoId))
                                 .catch(error => {
-                                    console.error("Error al eliminar relación:", menuId, error);
+                                    console.error("Error al crear relación para tipo:", tipoId, error);
                                     throw error;
                                 })
-                        );
-                    });
+                            );
+                        });
+                    }
+                } else {
+                    console.log("No hay cambios en los tipos");
                 }
-                
-                // Agregar nuevas relaciones
-                if (tiposAAgregar.length > 0) {
-                    tiposAAgregar.forEach(tipoId => {
-                        console.log("Creando nueva relación para tipo:", tipoId);
-                        promesas.push(
-                            axios.post(ENDPOINTS.MENU, {
-                                restaurante_id: parseInt(id),
-                                tipoComidaId: parseInt(tipoId)
-                            })
-                            .then(() => console.log("Nueva relación creada para tipo:", tipoId))
-                            .catch(error => {
-                                console.error("Error al crear relación para tipo:", tipoId, error);
-                                throw error;
-                            })
-                        );
-                    });
-                }
-                
-                // Si no hay cambios en las relaciones
-                if (promesas.length === 0) {
-                    console.log("No hay cambios en las relaciones de tipos");
+
+                // Si no hay cambios en nada, mostrar mensaje
+                if (!restauranteHaCambiado && !tiposHanCambiado) {
+                    console.log("No hay cambios que actualizar");
+                    setModalMensaje("No se detectaron cambios para actualizar");
+                    setModalAbierto(true);
                     return Promise.resolve();
                 }
                 
-                return Promise.all(promesas);
+                return Promise.all(promesasActualizacion);
             })
             .then(() => {
                 console.log("Actualización completada exitosamente");
