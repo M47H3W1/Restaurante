@@ -4,6 +4,14 @@ const Restaurantes = require('../models/restaurante.model');
 module.exports.CreateRestaurante =  async (request, response) => {
     const { nombre, direccion, reputacion, url } = request.body;
     try {
+        // Validar si ya existe un restaurante con el mismo nombre y dirección
+        const existente = await Restaurantes.findOne({ where: { nombre, direccion } });
+        if (existente) {
+            return response.status(409).json({
+                status: "error",
+                message: "Ya existe un restaurante con ese nombre y dirección"
+            });
+        }
         const Restaurante = await Restaurantes.create({
             nombre,
             direccion,

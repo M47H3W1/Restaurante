@@ -17,7 +17,8 @@ function Login({ setAuth }) {
       localStorage.setItem("token", res.data.token);
       setAuth({ user: res.data, token: res.data.token });
       setMensaje("");
-      navigate("/lista");
+      // Recarga la página para que se actualice el navegador
+      window.location.reload();
     } catch (err) {
       setMensaje("Credenciales inválidas");
     }

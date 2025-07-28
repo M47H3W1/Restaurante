@@ -4,8 +4,12 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const dotenv = require('dotenv');
 
-const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' }); //Validez de 30 días en el SERVIDOR  
+const generateToken = (id, userName, email) => {
+    return jwt.sign({ 
+        id, 
+        userName, 
+        email 
+    }, process.env.JWT_SECRET, { expiresIn: '30d' });
 };
 
 module.exports.CreateUser = async (request, response) => {
@@ -33,7 +37,12 @@ module.exports.CreateUser = async (request, response) => {
                 password: hashedPassword
             }) 
             
-            .then(user => response.json({email: user.email, userName: user.userName, id: user.id, token: generateToken(user.id)}))
+            .then(user => response.json({
+                email: user.email, 
+                userName: user.userName, 
+                id: user.id, 
+                token: generateToken(user.id, user.userName, user.email)
+            }))
             .catch(err => response.status(400).json("Error: " + err));
         }
     }
@@ -47,7 +56,7 @@ module.exports.LoginUser = async (request, response) => {
             email: userFound.email,
             userName: userFound.userName,
             id: userFound.id,
-            token: generateToken(userFound.id)
+            token: generateToken(userFound.id, userFound.userName, userFound.email)
         });
     } else {
         response.status(401).json({

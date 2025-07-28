@@ -83,6 +83,14 @@
   background: var(--color-primary, #5e72e4);
 }
 
+.Navegador-usuario {
+  color: #fff;
+  font-weight: 600;
+  margin-right: 12px;
+  font-size: 1.08rem;
+  letter-spacing: -0.5px;
+}
+
 @media (max-width: 900px) {
   .Navegador {
     flex-direction: column;
