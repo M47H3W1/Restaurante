@@ -1,0 +1,190 @@
+@import '../theme.css';
+
+.ListaRestaurantes {
+  max-width: 1100px;
+  margin: 40px auto 0 auto;
+  padding: 32px 24px;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  animation: fadeInUp 0.7s;
+}
+
+.ListaRestaurantes h1 {
+  color: var(--color-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.ListaRestaurantes h2 {
+  color: var(--color-danger);
+  font-size: 1.1rem;
+  margin: 0;
+  text-align: center;
+}
+
+.ListaRestaurantes button {
+  background: linear-gradient(90deg, #5e72e4 0%, #7f53ac 100%);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius);
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  margin: 8px 0;
+  outline: none;
+  will-change: transform;
+}
+.ListaRestaurantes button:hover, .ListaRestaurantes button:focus {
+  background: linear-gradient(90deg, #7f53ac 0%, #5e72e4 100%);
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(94,114,228,0.12);
+}
+
+.ListaRestaurantes > br {
+  display: none;
+}
+
+.RestauranteCard {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 32px;
+  background: #23262f;
+  border-radius: 18px;
+  box-shadow: 0 4px 24px rgba(20,20,30,0.13);
+  padding: 28px 24px;
+  margin-bottom: 8px;
+  transition: box-shadow 0.2s;
+}
+
+.RestauranteCard:hover {
+  box-shadow: 0 8px 32px rgba(94,114,228,0.16);
+}
+
+.RestauranteCard img {
+  width: 160px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(45,206,137,0.10);
+  background: #181a20;
+}
+
+.RestauranteCard-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.RestauranteCard-header {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 4px;
+}
+
+.RestauranteCard-nombre {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.RestauranteCard-tipo {
+  background: var(--color-accent);
+  color: #fff;
+  border-radius: 10px;
+  padding: 2px 12px;
+  font-size: 1em;
+  font-weight: 500;
+  margin-left: 8px;
+}
+
+.RestauranteCard-direccion {
+  color: var(--color-muted);
+  font-size: 1rem;
+}
+
+.RestauranteCard-reputacion {
+  color: var(--color-primary);
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.RestauranteCard-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.RestauranteCard-actions button {
+  min-width: 90px;
+  padding: 8px 0;
+  font-size: 1rem;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.RestauranteCard-actions .eliminar {
+  background: var(--color-danger);
+}
+
+.RestauranteCard-actions .actualizar {
+  background: var(--color-primary);
+}
+
+.RestauranteCard-likes {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 10px;
+}
+
+.RestauranteCard-likes .like-btn,
+.RestauranteCard-likes .dislike-btn {
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  font-size: 1.3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background var(--transition), transform var(--transition);
+}
+
+.RestauranteCard-likes .like-btn:hover {
+  background: #1a9c5e;
+}
+.RestauranteCard-likes .dislike-btn {
+  background: var(--color-danger);
+}
+.RestauranteCard-likes .dislike-btn:hover {
+  background: #b3001b;
+}
+
+@media (max-width: 800px) {
+  .RestauranteCard {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 18px;
+  }
+  .RestauranteCard img {
+    width: 100%;
+    height: 180px;
+  }
+}

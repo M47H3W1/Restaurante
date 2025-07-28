@@ -7,7 +7,7 @@ import Inicio from './Componentes/Inicio';
 import ActualizarRestaurante from './Componentes/ActualizarRestaurante';
 import Login from './Componentes/Login';
 import Register from './Componentes/Register';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ENDPOINTS } from './config/endpoints';
 
@@ -27,9 +27,15 @@ function App() {
   }, []);
 
   const [restaurantes, setRestaurantes] = useState([]);
-  // Cargar los restaurantes al iniciar la aplicación
-  React.useEffect(() => {
-    obtenerRestaurantesAxios();
+
+  const obtenerRestaurantes = async () => {
+    const res = await axios.get(ENDPOINTS.RESTAURANTES);
+    setRestaurantes(res.data);
+  };
+
+  // Llama a obtenerRestaurantes cuando se monta la lista
+  useEffect(() => {
+    obtenerRestaurantes();
   }, []);
   //Se cargan los restaurantes desde el servidor
   const obtenerRestaurantesAxios = () => {
@@ -117,6 +123,7 @@ function App() {
                 <ListaRestaurantes
                   restaurantes={restaurantes}
                   handleEliminar={eliminarRestaurante}
+                  obtenerRestaurantes={obtenerRestaurantes}
                 />
               </PrivateRoute>
             }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { ENDPOINTS } from '../config/endpoints';
+import './ListaRestaurantes.css';
 
 function ListaRestaurantes({
   restaurantes, 
@@ -69,20 +70,26 @@ function ListaRestaurantes({
       )}
       
       {restaurantes.map((restaurante, index) => (
-        <Restaurante
-          key={restaurante._id || restaurante.id || index}
-          id={restaurante._id || restaurante.id}
-          nombre={restaurante.nombre}
-          direccion={restaurante.direccion}
-          tipos={tiposPorRestaurante[restaurante._id || restaurante.id] || []} // <-- pasa los tipos
-          reputacion={restaurante.reputacion}
-          UrlImagen={restaurante.UrlImagen || restaurante.url}
-          SumarLikes={SumarLikes}
-          RestarDislikes={RestarDislikes}
-          mensajeErrorLikesNegativo={mensajeErrorLikesNegativo}
-          index={index}
-          handleEliminar={handleEliminar}
-        />
+        <div className="RestauranteCard" key={restaurante._id || restaurante.id || index}>
+          <img src={restaurante.UrlImagen || restaurante.url} alt={restaurante.nombre} />
+          <div className="RestauranteCard-content">
+            <div className="RestauranteCard-header">
+              <span className="RestauranteCard-nombre">{restaurante.nombre}</span>
+              <span className="RestauranteCard-tipo">{tiposPorRestaurante[restaurante._id || restaurante.id] || []}</span>
+            </div>
+            <div className="RestauranteCard-direccion">{restaurante.direccion}</div>
+            <div className="RestauranteCard-reputacion">Reputación: ⭐⭐⭐</div>
+            <div className="RestauranteCard-actions">
+              <button className="eliminar" onClick={() => handleEliminar(restaurante._id || restaurante.id)}>Eliminar</button>
+              <button className="actualizar">Actualizar</button>
+            </div>
+            <div className="RestauranteCard-likes">
+              <button className="like-btn" onClick={SumarLikes}>👍</button>
+              <button className="dislike-btn" onClick={RestarDislikes}>👎</button>
+              <span>Likes: {likesTotales} | Dislikes: {likesTotales}</span>
+            </div>
+          </div>
+        </div>
       ))}
     </div>
   );

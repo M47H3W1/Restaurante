@@ -6,6 +6,13 @@ import "./FormularioRestaurante.css";
 
 function CrearRestaurante (props){
     const [tipos, setTipos] = useState([]);
+    // Estado local para cada campo
+    const [nombre, setNombre] = useState("");
+    const [direccion, setDireccion] = useState("");
+    const [tipo, setTipo] = useState("");
+    const [reputacion, setReputacion] = useState("");
+    const [UrlImagen, setUrlImagen] = useState("");
+    const navigate = useNavigate();
 
     useEffect(() => {
         axios.get(ENDPOINTS.TIPO_COMIDA)
@@ -13,17 +20,17 @@ function CrearRestaurante (props){
             .catch(err => setTipos([]));
     }, []);
 
-    const handlerInsertar = () => {
+    const handlerInsertar = (e) => {
+        e.preventDefault(); // <-- Esto previene el doble envío
         const nuevoRestaurante = {
-            nombre: props.state.nombre,
-            direccion: props.state.direccion,
-            reputacion: props.state.reputacion,
-            url: props.state.UrlImagen
+            nombre,
+            direccion,
+            reputacion,
+            url: UrlImagen
         };
 
         axios.post(ENDPOINTS.RESTAURANTES, nuevoRestaurante)
             .then(res => {
-                console.log("📦 Respuesta al crear restaurante:", res.data);
                 const restauranteCreado = res.data.data;
                 const restauranteId = restauranteCreado._id || restauranteCreado.id;
                 if (!restauranteId) {
@@ -32,15 +39,19 @@ function CrearRestaurante (props){
                 }
                 const registroMenu = {
                     restaurante_id: restauranteId,
-                    tipoComidaId: props.state.tipo
+                    tipoComidaId: tipo
                 };
-                console.log("📝 Registro de menú a insertar:", registroMenu);
                 return axios.post(ENDPOINTS.MENU, registroMenu);
             })
             .then(() => {
                 alert("Restaurante y menú creados exitosamente");
-                props.agregarRestaurante(nuevoRestaurante);
-                props.setState({nombre:"", direccion:"", tipo:"", reputacion:"", UrlImagen:""});
+                if (props.agregarRestaurante) props.agregarRestaurante({ nombre, direccion, reputacion, url: UrlImagen });
+                // Limpia los campos
+                setNombre("");
+                setDireccion("");
+                setTipo("");
+                setReputacion("");
+                setUrlImagen("");
             })
             .catch(err => {
                 alert("Error al crear restaurante o menú");
@@ -48,29 +59,16 @@ function CrearRestaurante (props){
             });
     }
 
-    const navigate = useNavigate();
-
-    const handleInicio = () => {
-        navigate("/");
-    }
-
-    const handleLista = () => {
-        navigate("/lista");
-    }
-
     return (    
-        <div className="FormularioRestaurante">
-            <button onClick={handleInicio}>Volver al Inicio</button>
-            <button onClick={handleLista}>Ver lista</button>
+        <form className="FormularioRestaurante" onSubmit={handlerInsertar}>
+            <button type="button" onClick={() => navigate("/")}>Volver al Inicio</button>
+            <button type="button" onClick={() => navigate("/lista")}>Ver lista</button>
             <label>Nombre:</label>
-            <input type="text" value={props.state.nombre} onChange={(e) => props.setState({...props.state, nombre: e.target.value})} />
+            <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} />
             <label>Dirección:</label>
-            <input type="text" value={props.state.direccion} onChange={(e) => props.setState({...props.state, direccion: e.target.value})} />
+            <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} />
             <label>Tipo:</label>
-            <select
-                value={props.state.tipo}
-                onChange={(e) => props.setState({ ...props.state, tipo: e.target.value })}
-            >
+            <select value={tipo} onChange={e => setTipo(e.target.value)}>
                 <option value="">Seleccione un tipo</option>
                 {tipos.map((tipo, idx) => (
                     <option key={idx} value={tipo.id || tipo._id}>
@@ -79,11 +77,11 @@ function CrearRestaurante (props){
                 ))}
             </select>
             <label>Reputación:</label>
-            <input type="number" value={props.state.reputacion} onChange={(e) => props.setState({...props.state, reputacion: e.target.value})} />
+            <input type="number" value={reputacion} onChange={e => setReputacion(e.target.value)} />
             <label>URL Imagen:</label>
-            <input type="text" value={props.state.UrlImagen} onChange={(e)=> props.setState({...props.state,UrlImagen: e.target.value})}/>
-            <button onClick={handlerInsertar}>Insertar</button>
-        </div>  
+            <input type="text" value={UrlImagen} onChange={e => setUrlImagen(e.target.value)} />
+            <button type="submit">Insertar</button>
+        </form>  
     );      
 }
 
