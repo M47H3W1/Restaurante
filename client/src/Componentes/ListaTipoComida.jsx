@@ -47,23 +47,13 @@ function ListaTipoComida() {
         obtenerTipos();
         setModalMensaje("¡Tipo de restaurante creado exitosamente!");
         setModalAbierto(true);
-      });
-  };
-
-  // Eliminar tipo
-  const handleEliminar = (id) => {
-    setIdAEliminar(id);
-    setConfirmarAbierto(true);
-  };
-
-  const confirmarEliminacion = () => {
-    if (idAEliminar === null) return;
-    axios.delete(`${ENDPOINTS.TIPO_COMIDA}/${idAEliminar}`)
-      .then(() => {
-        setModalMensaje("Tipo de restaurante eliminado correctamente.");
-        setModalAbierto(true);
-        setConfirmarAbierto(false);
-        // No llamar a obtenerTipos aquí, espera a que el usuario cierre el modal
+      })
+      .catch((error) => {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          setMensaje("No tienes permisos para realizar esta acción. Inicia sesión.");
+        } else {
+          setMensaje("Error al crear el tipo de restaurante.");
+        }
       });
   };
 
@@ -78,7 +68,6 @@ function ListaTipoComida() {
   // Guardar edición
   const handleGuardar = (id) => {
     if (!editNombre.trim() || !editPaisOrigen.trim()) return;
-    // Verifica si ya existe (case-insensitive), excluyendo el actual
     const existe = tipos.some(
       t => t.id !== id && t.nombre.trim().toLowerCase() === editNombre.trim().toLowerCase()
     );
@@ -95,6 +84,13 @@ function ListaTipoComida() {
         obtenerTipos();
         setModalMensaje("Tipo de restaurante actualizado correctamente.");
         setModalAbierto(true);
+      })
+      .catch((error) => {
+        if (error.response?.status === 401 || error.response?.status === 403) {
+          setMensaje("No tienes permisos para realizar esta acción. Inicia sesión.");
+        } else {
+          setMensaje("Error al actualizar el tipo de restaurante.");
+        }
       });
   };
 
@@ -106,30 +102,38 @@ function ListaTipoComida() {
     setMensaje("");
   };
 
+  // Verificar si el usuario está autenticado
+  const isAuthenticated = () => {
+    return localStorage.getItem("token");
+  };
+
   return (
     <div className="TipoComidaContainer">
       <h2>Tipos de Restaurante</h2>
-      <form className="TipoComidaForm" onSubmit={handleCrear}>
-        <input
-          type="text"
-          placeholder="Nuevo tipo de restaurante"
-          value={nombre}
-          onChange={e => {
-            setNombre(e.target.value);
-            setMensaje("");
-          }}
-        />
-        <input
-          type="text"
-          placeholder="País de origen"
-          value={paisOrigen}
-          onChange={e => {
-            setPaisOrigen(e.target.value);
-            setMensaje("");
-          }}
-        />
-        <button type="submit">Agregar</button>
-      </form>
+      {/* Solo mostrar formulario de creación si está autenticado */}
+      {isAuthenticated() && (
+        <form className="TipoComidaForm" onSubmit={handleCrear}>
+          <input
+            type="text"
+            placeholder="Nuevo tipo de restaurante"
+            value={nombre}
+            onChange={e => {
+              setNombre(e.target.value);
+              setMensaje("");
+            }}
+          />
+          <input
+            type="text"
+            placeholder="País de origen"
+            value={paisOrigen}
+            onChange={e => {
+              setPaisOrigen(e.target.value);
+              setMensaje("");
+            }}
+          />
+          <button type="submit">Agregar</button>
+        </form>
+      )}
       {mensaje && (
         <div style={{
           color: "#ff4d4f",
@@ -175,11 +179,17 @@ function ListaTipoComida() {
               <>
                 <span className="TipoComidaNombre">{tipo.nombre}</span>
                 <span className="TipoComidaPais">({tipo.paisOrigen || "N/A"})</span>
-                <button className="editar" onClick={() => handleEditar(tipo)}>Editar</button>
-                <button className="eliminar" onClick={() => {
-                  setIdAEliminar(tipo.id);
-                  setConfirmarAbierto(true);
-                }}>Eliminar</button>
+                
+                {/* Solo mostrar botones de editar y eliminar si está autenticado */}
+                {isAuthenticated() && (
+                  <>
+                    <button className="editar" onClick={() => handleEditar(tipo)}>Editar</button>
+                    <button className="eliminar" onClick={() => {
+                      setIdAEliminar(tipo.id);
+                      setConfirmarAbierto(true);
+                    }}>Eliminar</button>
+                  </>
+                )}
               </>
             )}
           </li>
@@ -203,11 +213,19 @@ function ListaTipoComida() {
               className="ModalMensaje-boton"
               onClick={() => {
                 setConfirmarAbierto(false);
-                // Aquí sí llamas a la eliminación real:
                 if (idAEliminar !== null) {
                   axios.delete(`${ENDPOINTS.TIPO_COMIDA}/${idAEliminar}`)
                     .then(() => {
                       setModalMensaje("Tipo de restaurante eliminado correctamente.");
+                      setModalAbierto(true);
+                      setIdAEliminar(null);
+                    })
+                    .catch((error) => {
+                      if (error.response?.status === 401 || error.response?.status === 403) {
+                        setModalMensaje("No tienes permisos para realizar esta acción. Inicia sesión.");
+                      } else {
+                        setModalMensaje("Error al eliminar el tipo de restaurante.");
+                      }
                       setModalAbierto(true);
                       setIdAEliminar(null);
                     });

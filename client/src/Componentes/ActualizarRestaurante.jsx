@@ -30,29 +30,49 @@ function ActualizarRestaurante(props) {
 
     // Cargar datos del restaurante cuando cambia el id
     useEffect(() => {
-        if (id) {
-            cargarRestaurante();
-            cargarTiposDelRestaurante();
-        }
-    }, [id]);
+        if (!id) return;
 
-    const cargarRestaurante = () => {
-        axios.get(`${ENDPOINTS.RESTAURANTES}/${id}`)
-            .then(response => {
-                const data = response.data;
-                setRestaurante({
-                    nombre: data.nombre || "",
-                    direccion: data.direccion || "",
-                    reputacion: data.reputacion || "",
-                    UrlImagen: data.UrlImagen || data.url || ""
+        const cargarRestaurante = () => {
+            axios.get(`${ENDPOINTS.RESTAURANTES}/${id}`)
+                .then(response => {
+                    const data = response.data;
+                    setRestaurante({
+                        nombre: data.nombre || "",
+                        direccion: data.direccion || "",
+                        reputacion: data.reputacion || "",
+                        UrlImagen: data.UrlImagen || data.url || ""
+                    });
+                })
+                .catch(error => {
+                    console.error('Error al obtener el restaurante:', error);
+                    setModalMensaje("Error al cargar los datos del restaurante");
+                    setModalAbierto(true);
                 });
-            })
-            .catch(error => {
-                console.error('Error al obtener el restaurante:', error);
-                setModalMensaje("Error al cargar los datos del restaurante");
-                setModalAbierto(true);
-            });
-    };
+        };
+
+        const cargarTiposDelRestaurante = () => {
+            console.log("Cargando tipos para restaurante ID:", id);
+            axios.get(`${ENDPOINTS.MENU}`)
+                .then(res => {
+                    console.log("Todos los menús:", res.data);
+                    const menusDelRestaurante = res.data.filter(menu => 
+                        String(menu.restaurante_id || menu.restauranteId) === String(id)
+                    );
+                    console.log("Menús del restaurante:", menusDelRestaurante);
+                    const tiposIds = menusDelRestaurante.map(item => String(item.tipoComidaId));
+                    console.log("Tipos IDs seleccionados:", tiposIds);
+                    setTiposSeleccionados(tiposIds);
+                })
+                .catch(error => {
+                    console.error('Error al cargar tipos del restaurante:', error);
+                    setTiposSeleccionados([]);
+                });
+        };
+
+        // Ejecutar las funciones
+        cargarRestaurante();
+        cargarTiposDelRestaurante();
+    }, [id]);
 
     const handlerGuardar = () => {
         if (!restaurante.nombre.trim() || 
@@ -170,25 +190,6 @@ function ActualizarRestaurante(props) {
         navigate("/lista");
     };
 
-    const cargarTiposDelRestaurante = () => {
-        console.log("Cargando tipos para restaurante ID:", id);
-        axios.get(`${ENDPOINTS.MENU}`)
-            .then(res => {
-                console.log("Todos los menús:", res.data);
-                const menusDelRestaurante = res.data.filter(menu => 
-                    String(menu.restaurante_id || menu.restauranteId) === String(id)
-                );
-                console.log("Menús del restaurante:", menusDelRestaurante);
-                const tiposIds = menusDelRestaurante.map(item => String(item.tipoComidaId));
-                console.log("Tipos IDs seleccionados:", tiposIds);
-                setTiposSeleccionados(tiposIds);
-            })
-            .catch(error => {
-                console.error('Error al cargar tipos del restaurante:', error);
-                setTiposSeleccionados([]);
-            });
-    };
-
     const handleTiposChange = (e) => {
         const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
         setTiposSeleccionados(selectedOptions);
@@ -196,75 +197,103 @@ function ActualizarRestaurante(props) {
 
     return (
         <>
-            <div className="ActualizarRestaurante">
-                <button onClick={handleInicio}>Volver al Inicio</button>
-                <br />
-                <button onClick={handleLista}>Ver lista</button>
-                <br />
+            <div className="FormularioRestaurante">
+                <div className="FormularioRestaurante-header">
+                    <button className="FormularioRestaurante-btn" onClick={handleInicio}>Volver al Inicio</button>
+                    <button className="FormularioRestaurante-btn" onClick={handleLista}>Ver lista</button>
+                </div>
 
-                <label>Nombre:</label>
-                <input type="text" value={restaurante.nombre} onChange={(e) => setRestaurante({ ...restaurante, nombre: e.target.value })} />
-                
-                <label>Dirección:</label>
-                <input type="text" value={restaurante.direccion} onChange={(e) => setRestaurante({ ...restaurante, direccion: e.target.value })} />
-                
-                <label>Tipos:</label>
-                <select
-                    multiple
-                    value={tiposSeleccionados}
-                    onChange={handleTiposChange}
-                    style={{ minHeight: "80px" }}
-                >
-                    {tipos.map((tipo) => (
-                        <option key={tipo.id || tipo._id} value={String(tipo.id || tipo._id)}>
-                            {tipo.nombre || tipo.tipo || tipo}
-                        </option>
-                    ))}
-                </select>
-                
-                <label>Reputación:</label>
-                <input type="number" value={restaurante.reputacion} onChange={(e) => setRestaurante({ ...restaurante, reputacion: e.target.value })} />
-                
-                <label>URL Imagen:</label>
-                <input
-                    type="text"
-                    value={restaurante.UrlImagen}
-                    onChange={e => {
-                        setRestaurante({ ...restaurante, UrlImagen: e.target.value });
-                        setImagenError(false);
-                    }}
-                    onFocus={e => e.target.select()}
-                />
-                
-                {restaurante.UrlImagen && !imagenError && (
-                    <div style={{ margin: "10px 0" }}>
-                        <img
-                            src={restaurante.UrlImagen}
-                            alt="Vista previa"
-                            style={{ maxWidth: "200px", maxHeight: "150px", borderRadius: "8px", border: "1px solid #ccc" }}
-                            onError={() => setImagenError(true)}
+                <h2 className="FormularioRestaurante-titulo">Actualizar Restaurante</h2>
+
+                <form className="FormularioRestaurante-form">
+                    <div className="FormularioRestaurante-campo">
+                        <label className="FormularioRestaurante-label">Nombre:</label>
+                        <input 
+                            className="FormularioRestaurante-input"
+                            type="text" 
+                            value={restaurante.nombre} 
+                            onChange={(e) => setRestaurante({ ...restaurante, nombre: e.target.value })} 
                         />
                     </div>
-                )}
-                {imagenError && (
-                    <div style={{
-                        width: "200px",
-                        height: "150px",
-                        background: "#f8d7da",
-                        color: "#721c24",
-                        border: "1px solid #f5c6cb",
-                        borderRadius: "8px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "14px",
-                        margin: "10px 0"
-                    }}>
-                        No se pudo cargar la imagen
+                    
+                    <div className="FormularioRestaurante-campo">
+                        <label className="FormularioRestaurante-label">Dirección:</label>
+                        <input 
+                            className="FormularioRestaurante-input"
+                            type="text" 
+                            value={restaurante.direccion} 
+                            onChange={(e) => setRestaurante({ ...restaurante, direccion: e.target.value })} 
+                        />
                     </div>
-                )}
+                    
+                    <div className="FormularioRestaurante-campo">
+                        <label className="FormularioRestaurante-label">Tipos:</label>
+                        <select
+                            className="FormularioRestaurante-select"
+                            multiple
+                            value={tiposSeleccionados}
+                            onChange={handleTiposChange}
+                        >
+                            {tipos.map((tipo) => (
+                                <option key={tipo.id || tipo._id} value={String(tipo.id || tipo._id)}>
+                                    {tipo.nombre || tipo.tipo || tipo}
+                                </option>
+                            ))}
+                        </select>
+                        <small className="FormularioRestaurante-help">Mantén Ctrl/Cmd presionado para seleccionar múltiples tipos</small>
+                    </div>
+                    
+                    <div className="FormularioRestaurante-campo">
+                        <label className="FormularioRestaurante-label">Reputación:</label>
+                        <input 
+                            className="FormularioRestaurante-input"
+                            type="number" 
+                            min="1" 
+                            max="5" 
+                            value={restaurante.reputacion} 
+                            onChange={(e) => setRestaurante({ ...restaurante, reputacion: e.target.value })} 
+                        />
+                    </div>
+                    
+                    <div className="FormularioRestaurante-campo">
+                        <label className="FormularioRestaurante-label">URL Imagen:</label>
+                        <input
+                            className="FormularioRestaurante-input"
+                            type="text"
+                            value={restaurante.UrlImagen}
+                            onChange={e => {
+                                setRestaurante({ ...restaurante, UrlImagen: e.target.value });
+                                setImagenError(false);
+                            }}
+                            onFocus={e => e.target.select()}
+                            placeholder="https://ejemplo.com/imagen.jpg"
+                        />
+                        
+                        {restaurante.UrlImagen && !imagenError && (
+                            <div className="FormularioRestaurante-preview">
+                                <img
+                                    src={restaurante.UrlImagen}
+                                    alt="Vista previa"
+                                    className="FormularioRestaurante-imagen"
+                                    onError={() => setImagenError(true)}
+                                />
+                            </div>
+                        )}
+                        {imagenError && (
+                            <div className="FormularioRestaurante-error">
+                                No se pudo cargar la imagen
+                            </div>
+                        )}
+                    </div>
 
-                <button onClick={handlerGuardar}>Guardar</button>
+                    <button 
+                        className="FormularioRestaurante-submit" 
+                        type="button"
+                        onClick={handlerGuardar}
+                    >
+                        Actualizar Restaurante
+                    </button>
+                </form>
             </div>
             
             <ModalMensaje

@@ -39,12 +39,7 @@ function App() {
   useEffect(() => {
     obtenerRestaurantes();
   }, []);
-  //Se cargan los restaurantes desde el servidor
-  const obtenerRestaurantesAxios = () => {
-    axios.get(ENDPOINTS.RESTAURANTES)
-      .then(response => setRestaurantes(response.data))
-      .catch(error => console.error('Error al obtener los restaurantes:', error));
-  };
+
 
   //Se agrega un nuevo restaurante al servidor
   const agregarRestauranteAxios = (nuevoRestaurante) => {
@@ -98,7 +93,8 @@ function App() {
   // Rutas protegidas
   const PrivateRoute = ({ children }) => {
     const token = localStorage.getItem("token");
-    return token ? children : <Navigate to="/login" />;
+    // Usar auth para verificar si está autenticado
+    return (token && auth.token) ? children : <Navigate to="/login" />;
   };
 
   return (
@@ -106,44 +102,50 @@ function App() {
       <BrowserRouter>
         <Navegador />
         <Routes>
+          {/* Rutas públicas - no requieren autenticación */}
           <Route path="/" element={<Inicio />} />
           <Route path="/login" element={<Login setAuth={setAuth} />} />
           <Route path="/register" element={<Register />} />
+          
+          {/* Visualización pública de restaurantes y tipos */}
+          <Route
+            path="/lista"
+            element={
+              <ListaRestaurantes
+                restaurantes={restaurantes}
+                handleEliminar={eliminarRestaurante}
+                obtenerRestaurantes={obtenerRestaurantes}
+              />
+            }
+          />
           <Route path="/tipos" element={<ListaTipoComida />} />
+          <Route path="/axios" element={<ComponenteAxios />} />
+
+          {/* Rutas protegidas - requieren autenticación */}
           <Route
             path='/crear'
             element={
               <PrivateRoute>
                 <CrearRestaurante 
                   agregarRestaurante={agregarRestaurante}
-                  obtenerRestaurantes={obtenerRestaurantes} // ✅ Pasa la función
+                  obtenerRestaurantes={obtenerRestaurantes}
                 />
               </PrivateRoute>
             }
           />
-          <Route path='/actualizar/:id' element={
-            <PrivateRoute>
-              <ActualizarRestaurante
-                state={state}
-                setState={setState}
-                actualizarRestaurante={actualizarRestaurante}
-                obtenerRestaurantes={obtenerRestaurantes} // ✅ Pasa la función
-              />
-            </PrivateRoute>
-          } />
-          <Route
-            path="/lista"
+          <Route 
+            path='/actualizar/:id' 
             element={
               <PrivateRoute>
-                <ListaRestaurantes
-                  restaurantes={restaurantes}
-                  handleEliminar={eliminarRestaurante}
-                  obtenerRestaurantes={obtenerRestaurantes} // ✅ Ya lo tienes
+                <ActualizarRestaurante
+                  state={state}
+                  setState={setState}
+                  actualizarRestaurante={actualizarRestaurante}
+                  obtenerRestaurantes={obtenerRestaurantes}
                 />
               </PrivateRoute>
-            }
+            } 
           />
-          <Route path="/axios" element={<ComponenteAxios />} />
         </Routes>
       </BrowserRouter>
     </div>

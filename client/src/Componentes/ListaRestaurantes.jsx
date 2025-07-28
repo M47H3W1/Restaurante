@@ -1,4 +1,3 @@
-import Restaurante from './Restaurante';
 import { useNavigate } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
@@ -11,6 +10,7 @@ function ListaRestaurantes({
   handleEliminar,
   obtenerRestaurantes
 }) {
+  const navigate = useNavigate();
   const [tiposPorRestaurante, setTiposPorRestaurante] = useState({});
   const [confirmarAbierto, setConfirmarAbierto] = useState(false);
   const [idAEliminar, setIdAEliminar] = useState(null);
@@ -102,8 +102,6 @@ function ListaRestaurantes({
     setTimeout(() => setMensajeErrorLikesNegativos(""), 3000);
   };
 
-  const navigate = useNavigate();
-
   const handleInicio = () => {
     navigate("/");  
   }
@@ -128,12 +126,23 @@ function ListaRestaurantes({
     setConfirmarAbierto(true);
   };
 
+  // Verificar si el usuario está autenticado
+  const isAuthenticated = () => {
+    return localStorage.getItem("token");
+  };
+
   return (
     <div className="ListaRestaurantes">
       <button onClick={handleInicio}>Volver al Inicio</button>
       <br />
-      <button onClick={handleCrear}>Crear nuevo restaurante</button>
-      <br />
+      
+      {/* Solo mostrar botón de crear si está autenticado */}
+      {isAuthenticated() && (
+        <>
+          <button onClick={handleCrear}>Crear nuevo restaurante</button>
+          <br />
+        </>
+      )}
       
       <h1>Likes totales: {likes}</h1>
       {mensajeErrorLikesNegativos && (
@@ -152,10 +161,15 @@ function ListaRestaurantes({
             <div className="RestauranteCard-reputacion">
               Reputación: {generarEstrellas(restaurante.reputacion)} ({restaurante.reputacion}/5)
             </div>
-            <div className="RestauranteCard-actions">
-              <button className="eliminar" onClick={() => confirmarEliminar(restaurante)}>Eliminar</button>
-              <button className="actualizar" onClick={() => navigate(`/actualizar/${restaurante.id || restaurante._id}`)}>Actualizar</button>
-            </div>
+            
+            {/* Solo mostrar botones de acción si está autenticado */}
+            {isAuthenticated() && (
+              <div className="RestauranteCard-actions">
+                <button className="eliminar" onClick={() => confirmarEliminar(restaurante)}>Eliminar</button>
+                <button className="actualizar" onClick={() => navigate(`/actualizar/${restaurante.id || restaurante._id}`)}>Actualizar</button>
+              </div>
+            )}
+            
             <div className="RestauranteCard-likes">
               <button className="like-btn" onClick={SumarLikes}>👍</button>
               <button className="dislike-btn" onClick={RestarLikes}>👎</button>
