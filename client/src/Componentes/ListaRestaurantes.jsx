@@ -82,7 +82,7 @@ function ListaRestaurantes({
 
   // Función para abrir el modal de confirmación
   const confirmarEliminar = (restaurante) => {
-    setIdAEliminar(restaurante.id);
+    setIdAEliminar(restaurante.id || restaurante._id);
     setNombreRestauranteEliminar(restaurante.nombre);
     setConfirmarAbierto(true);
   };
@@ -100,12 +100,12 @@ function ListaRestaurantes({
       )}
       
       {restaurantes.map((restaurante, index) => (
-        <div className="RestauranteCard" key={restaurante.id || index}>
+        <div className="RestauranteCard" key={restaurante.id || restaurante._id || index}>
           <img src={restaurante.UrlImagen || restaurante.url} alt={restaurante.nombre} />
           <div className="RestauranteCard-content">
             <div className="RestauranteCard-header">
               <span className="RestauranteCard-nombre">{restaurante.nombre}</span>
-              <span className="RestauranteCard-tipo">{tiposPorRestaurante[restaurante.id] || []}</span>
+              <span className="RestauranteCard-tipo">{tiposPorRestaurante[restaurante.id || restaurante._id] || []}</span>
             </div>
             <div className="RestauranteCard-direccion">{restaurante.direccion}</div>
             <div className="RestauranteCard-reputacion">
@@ -113,7 +113,7 @@ function ListaRestaurantes({
             </div>
             <div className="RestauranteCard-actions">
               <button className="eliminar" onClick={() => confirmarEliminar(restaurante)}>Eliminar</button>
-              <button className="actualizar">Actualizar</button>
+              <button className="actualizar" onClick={() => navigate(`/actualizar/${restaurante.id || restaurante._id}`)}>Actualizar</button>
             </div>
             <div className="RestauranteCard-likes">
               <button className="like-btn" onClick={SumarLikes}>👍</button>
@@ -137,6 +137,10 @@ function ListaRestaurantes({
                 handleEliminar(idAEliminar);
                 setIdAEliminar(null);
                 setNombreRestauranteEliminar("");
+                // ✅ Recarga la lista después de eliminar
+                if (obtenerRestaurantes) {
+                  obtenerRestaurantes();
+                }
               }}
             >
               Eliminar

@@ -107,13 +107,21 @@ function App() {
             path='/crear'
             element={
               <PrivateRoute>
-                <CrearRestaurante agregarRestaurante={agregarRestaurante} />
+                <CrearRestaurante 
+                  agregarRestaurante={agregarRestaurante}
+                  obtenerRestaurantes={obtenerRestaurantes} // ✅ Pasa la función
+                />
               </PrivateRoute>
             }
           />
           <Route path='/actualizar/:id' element={
             <PrivateRoute>
-              <ActualizarRestaurante actualizarRestaurante={actualizarRestaurante} />
+              <ActualizarRestaurante
+                state={state}
+                setState={setState}
+                actualizarRestaurante={actualizarRestaurante}
+                obtenerRestaurantes={obtenerRestaurantes} // ✅ Pasa la función
+              />
             </PrivateRoute>
           } />
           <Route
@@ -123,6 +131,7 @@ function App() {
                 <ListaRestaurantes
                   restaurantes={restaurantes}
                   handleEliminar={eliminarRestaurante}
+                  obtenerRestaurantes={obtenerRestaurantes} // ✅ Ya lo tienes
                 />
               </PrivateRoute>
             }

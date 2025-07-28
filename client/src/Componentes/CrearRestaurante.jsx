@@ -64,7 +64,7 @@ function CrearRestaurante (props){
             .then(() => {
                 setModalMensaje("Restaurante y tipos creados exitosamente");
                 setModalAbierto(true);
-                if (props.agregarRestaurante) props.agregarRestaurante({ nombre, direccion, reputacion, url: UrlImagen });
+                
                 // Limpia los campos
                 setNombre("");
                 setDireccion("");
@@ -110,7 +110,16 @@ function CrearRestaurante (props){
             <ModalMensaje
                 abierto={modalAbierto}
                 mensaje={modalMensaje}
-                onClose={() => setModalAbierto(false)}
+                onClose={() => {
+                    setModalAbierto(false);
+                    if (modalMensaje.includes("exitosamente")) {
+                        // ✅ Recarga la lista después de crear
+                        if (props.obtenerRestaurantes) {
+                            props.obtenerRestaurantes();
+                        }
+                        navigate("/lista");
+                    }
+                }}
             />
         </>
     );      
