@@ -155,7 +155,18 @@ function ListaRestaurantes({
           <div className="RestauranteCard-content">
             <div className="RestauranteCard-header">
               <span className="RestauranteCard-nombre">{restaurante.nombre}</span>
-              <span className="RestauranteCard-tipo">{tiposPorRestaurante[restaurante.id || restaurante._id] || []}</span>
+              
+              {/* Contenedores individuales para cada tipo */}
+              <div className="RestauranteCard-tipos">
+                {(tiposPorRestaurante[restaurante.id || restaurante._id] || []).map((tipo, tipoIndex) => (
+                  <span 
+                    key={tipoIndex} 
+                    className={`RestauranteCard-tipo tipo-${tipoIndex % 6}`}
+                  >
+                    {tipo}
+                  </span>
+                ))}
+              </div>
             </div>
             <div className="RestauranteCard-direccion">{restaurante.direccion}</div>
             <div className="RestauranteCard-reputacion">

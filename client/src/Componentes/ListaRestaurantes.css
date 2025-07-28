@@ -101,14 +101,77 @@
   color: var(--color-text);
 }
 
+.RestauranteCard-tipos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
 .RestauranteCard-tipo {
-  background: var(--color-accent);
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
   color: #fff;
-  border-radius: 10px;
-  padding: 2px 12px;
-  font-size: 1em;
-  font-weight: 500;
-  margin-left: 8px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.RestauranteCard-tipo:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+}
+
+/* Gradientes únicos para cada tipo */
+.tipo-0 {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.tipo-1 {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.tipo-2 {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.tipo-3 {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+.tipo-4 {
+  background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+.tipo-5 {
+  background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+  color: #333; /* Texto oscuro para este gradiente claro */
+  text-shadow: none;
+}
+
+/* Gradientes adicionales para más tipos */
+.tipo-6 {
+  background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+  color: #333;
+  text-shadow: none;
+}
+
+.tipo-7 {
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+
+.tipo-8 {
+  background: linear-gradient(135deg, #fad0c4 0%, #ffd1ff 100%);
+  color: #333;
+  text-shadow: none;
+}
+
+.tipo-9 {
+  background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+  color: #333;
+  text-shadow: none;
 }
 
 .RestauranteCard-direccion {
