@@ -1,0 +1,81 @@
+@import '../theme.css';
+
+.FormularioRestaurante {
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 420px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 36px 28px 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: center; /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente si hay espacio */
+  animation: fadeInUp 0.7s;
+}
+
+.FormularioRestaurante label {
+  font-weight: 600;
+  color: var(--color-muted);
+  margin-bottom: 4px;
+}
+
+.FormularioRestaurante input,
+.FormularioRestaurante select {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  background: #23262f;
+  padding: 14px 16px;
+  font-size: 1rem;
+  margin-bottom: 10px;
+  color: var(--color-text);
+  box-shadow: 0 1px 4px rgba(44,62,80,0.04);
+  transition: box-shadow var(--transition), background var(--transition);
+}
+
+.FormularioRestaurante input:focus,
+.FormularioRestaurante select:focus {
+  background: #23262f;
+  box-shadow: 0 2px 8px rgba(45,206,137,0.10);
+  outline: none;
+}
+
+.FormularioRestaurante button {
+  margin-top: 10px;
+  padding: 12px 0;
+  border-radius: 12px;
+  background: var(--gradient);
+  color: #fff;
+  font-weight: bold;
+  font-size: 1.1rem;
+  box-shadow: var(--shadow);
+  transition: background var(--transition), transform var(--transition);
+  border: none;
+}
+
+.FormularioRestaurante button:hover {
+  background: linear-gradient(90deg, #5e72e4 0%, #2dce89 100%);
+  transform: scale(1.04);
+}
+
+.FormularioRestaurante .imagen-preview img {
+  max-width: 100%;
+  max-height: 180px;
+  border-radius: 10px;
+  margin: 0 auto;
+  display: block;
+  box-shadow: 0 2px 12px rgba(45,206,137,0.10);
+  animation: fadeInUp 0.7s;
+}
+
+.FormularioRestaurante label,
+.FormularioRestaurante input,
+.FormularioRestaurante select,
+.FormularioRestaurante button {
+  width: 100%;
+  max-width: 340px;
+  text-align: center;
+}

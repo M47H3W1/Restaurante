@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
-import "./ActualizarRestaurante.css";
+import "./FormularioRestaurante.css";
 import axios from "axios";
 import { ENDPOINTS } from '../config/endpoints';
 

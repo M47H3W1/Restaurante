@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { ENDPOINTS } from '../config/endpoints';
+import "./FormularioRestaurante.css";
 
 function CrearRestaurante (props){
     const [tipos, setTipos] = useState([]);
@@ -22,8 +23,8 @@ function CrearRestaurante (props){
 
         axios.post(ENDPOINTS.RESTAURANTES, nuevoRestaurante)
             .then(res => {
-                console.log("📦 Respuesta al crear restaurante:", res.data); // <-- Depuración
-                const restauranteCreado = res.data.data; // <-- Aquí está el restaurante
+                console.log("📦 Respuesta al crear restaurante:", res.data);
+                const restauranteCreado = res.data.data;
                 const restauranteId = restauranteCreado._id || restauranteCreado.id;
                 if (!restauranteId) {
                     alert("No se pudo obtener el ID del restaurante creado. Revisa la respuesta del backend.");
@@ -58,21 +59,9 @@ function CrearRestaurante (props){
     }
 
     return (    
-        <div className="CrearRestaurante">
-            {/*<p>Se utiliza el hook useNavigate</p>*/}
+        <div className="FormularioRestaurante">
             <button onClick={handleInicio}>Volver al Inicio</button>
-            <br />
             <button onClick={handleLista}>Ver lista</button>
-            <br />
-            {/*
-            <p>Se utiliza Link</p>
-            <Link to="/">
-                <button>Volver al Inicio</button>
-            </Link>
-            <Link to="/lista">
-                <button>Ver Lista de Restaurantes</button>
-            </Link>
-            */}
             <label>Nombre:</label>
             <input type="text" value={props.state.nombre} onChange={(e) => props.setState({...props.state, nombre: e.target.value})} />
             <label>Dirección:</label>
@@ -93,11 +82,7 @@ function CrearRestaurante (props){
             <input type="number" value={props.state.reputacion} onChange={(e) => props.setState({...props.state, reputacion: e.target.value})} />
             <label>URL Imagen:</label>
             <input type="text" value={props.state.UrlImagen} onChange={(e)=> props.setState({...props.state,UrlImagen: e.target.value})}/>
-            
-            
-            
             <button onClick={handlerInsertar}>Insertar</button>
-            
         </div>  
     );      
 }

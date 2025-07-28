@@ -1,0 +1,25 @@
+:root {
+  --color-bg: #181a20;
+  --color-surface: #23262f;
+  --color-primary: #2dce89;
+  --color-primary-dark: #1a9c5e;
+  --color-accent: #5e72e4;
+  --color-danger: #ff4d4f;
+  --color-text: #f7f7fa;
+  --color-muted: #a0aec0;
+  --radius: 18px;
+  --shadow: 0 6px 32px rgba(20,20,30,0.18);
+  --transition: 0.22s cubic-bezier(.4,0,.2,1);
+  --gradient: linear-gradient(90deg, #23262f 0%, #2dce89 100%);
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px);}
+  to { opacity: 1; transform: translateY(0);}
+}
+
+@keyframes pop {
+  0% { transform: scale(0.95);}
+  60% { transform: scale(1.05);}
+  100% { transform: scale(1);}
+}

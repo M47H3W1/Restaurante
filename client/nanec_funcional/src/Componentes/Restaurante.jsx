@@ -62,40 +62,25 @@ function Restaurante (props){
 
     return (
         <div className="Restaurante">
-            <img src={UrlImagen} alt="" />
-            <h1>{nombre}</h1>
-            <h3>{direccion}</h3>
-            <h4>{tipo}</h4>
-            <h4>Reputación: {estrellas()}</h4>
-            <h4>Me gusta:{preferencias.likes}</h4>
-            <h4>No me gusta:{preferencias.dislikes}</h4>
-            <div>
-                <strong>Tipos:</strong>{" "}
-                {tipos && tipos.length > 0 ? (
-                <span>
-                    {tipos.map((tipo, idx) => (
-                    <span
-                        key={idx}
-                        style={{
-                        background: "#ffe082",
-                        color: "#6d4c00",
-                        borderRadius: "12px",
-                        padding: "2px 10px",
-                        fontSize: "0.95em",
-                        border: "1px solid #e0b800",
-                        marginRight: "5px"
-                        }}
-                    >
-                        {tipo}
-                    </span>
-                    ))}
-                </span>
-                ) : (
-                <span style={{ color: "#888" }}>Sin tipo</span>
-                )}
+            <img src={UrlImagen} alt={nombre} />
+            <div className="Restaurante-content">
+                <h1>{nombre}</h1>
+                <h3>{direccion}</h3>
+                <div className="tipos">
+                {tipos && tipos.length > 0
+                    ? tipos.map((tipo, idx) => (
+                        <span className="tipo-badge" key={idx}>{tipo}</span>
+                    ))
+                    : <span className="tipo-badge" style={{background: "#eee", color: "#aaa"}}>Sin tipo</span>
+                }
+                </div>
+                <h4>Reputación: {estrellas()}</h4>
+                <div className="actions">
+                <button onClick={handlerLike} title="Me gusta">👍</button>
+                <button onClick={handlerDislike} title="No me gusta">👎</button>
+                <span style={{marginLeft: 12, color: "var(--color-muted)"}}>Likes: {preferencias.likes} | Dislikes: {preferencias.dislikes}</span>
+                </div>
             </div>
-            <button onClick={handlerLike}>👍</button>
-            <button onClick={handlerDislike}>👎</button>
             <div className="botones-acciones">
                 <button onClick={handlerEliminar_}>Eliminar</button>
                 <button onClick={handleActualizar}>Actualizar</button>
