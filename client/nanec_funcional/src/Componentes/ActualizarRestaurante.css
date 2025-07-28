@@ -1,0 +1,46 @@
+.ActualizarRestaurante {
+    background-color: #f8f4e3;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(100, 60, 10, 0.15);
+    width: 400px;
+    margin: 40px auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.ActualizarRestaurante label {
+    margin-top: 12px;
+    margin-bottom: 4px;
+    font-weight: bold;
+    align-self: flex-start;
+}
+
+.ActualizarRestaurante input,
+.ActualizarRestaurante select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 6px;
+    border: 1px solid #bfa76f;
+    font-size: 1rem;
+    background: #fffbe6;
+}
+
+.ActualizarRestaurante button {
+    margin-top: 14px;
+    margin-right: 8px;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 6px;
+    background-color: #c4891b;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.ActualizarRestaurante button:hover {
+    background-color: #a06c13;
+}

@@ -1,0 +1,42 @@
+{
+  "restaurantes": [
+    {
+      "id": "1",
+      "nombre": "El Redil",
+      "direccion": "Shyris y Matamoros",
+      "tipo": "Tradicional",
+      "reputacion": 1,
+      "UrlImagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkGTV9ptpoJ1nv8SE8QJ_A4-pCjnd46axWiA&s"
+    },
+    {
+      "id": "2",
+      "nombre": "Cafeteria",
+      "direccion": "Julio Cesar Villacres y N68F",
+      "tipo": "Cafeteria",
+      "reputacion": "3",
+      "UrlImagen": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSQF0y8LuMG1QYGPlUvNQd52hfNGveFrwmL-A&s"
+    },
+    {
+      "id": "3",
+      "nombre": "Restaurante los Pedrosa",
+      "direccion": "Presa y Zamora",
+      "tipo": "Desayunos",
+      "reputacion": 5,
+      "UrlImagen": "https://th.bing.com/th/id/OIP.Lq4y_ACmvY-av-0cmcxQeQHaE7?w=287&h=191&c=7&r=0&o=5&pid=1.7"
+    }
+  ],
+  "clientes": [
+    {
+      "id": "1",
+      "nombre": "Juan Perez",
+      "direccion": "Av. 10 de Agosto",
+      "telefono": "0991234567"
+    },
+    {
+      "id": "2",
+      "nombre": "Maria Gomez",
+      "direccion": "Calle Foch",
+      "telefono": "0987654321"
+    }
+  ]
+}
