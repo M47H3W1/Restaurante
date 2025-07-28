@@ -14,6 +14,8 @@ function ListaTipoComida() {
   const [mensaje, setMensaje] = useState(""); // Mensaje de error
   const [modalAbierto, setModalAbierto] = useState(false);
   const [modalMensaje, setModalMensaje] = useState("");
+  const [confirmarAbierto, setConfirmarAbierto] = useState(false);
+  const [idAEliminar, setIdAEliminar] = useState(null);
 
   // Obtener todos los tipos al montar
   const obtenerTipos = () => {
@@ -50,12 +52,18 @@ function ListaTipoComida() {
 
   // Eliminar tipo
   const handleEliminar = (id) => {
-    if (!window.confirm("¿Eliminar este tipo de restaurante?")) return;
-    axios.delete(`${ENDPOINTS.TIPO_COMIDA}/${id}`)
+    setIdAEliminar(id);
+    setConfirmarAbierto(true);
+  };
+
+  const confirmarEliminacion = () => {
+    if (idAEliminar === null) return;
+    axios.delete(`${ENDPOINTS.TIPO_COMIDA}/${idAEliminar}`)
       .then(() => {
-        obtenerTipos();
         setModalMensaje("Tipo de restaurante eliminado correctamente.");
         setModalAbierto(true);
+        setConfirmarAbierto(false);
+        // No llamar a obtenerTipos aquí, espera a que el usuario cierre el modal
       });
   };
 
@@ -168,7 +176,10 @@ function ListaTipoComida() {
                 <span className="TipoComidaNombre">{tipo.nombre}</span>
                 <span className="TipoComidaPais">({tipo.paisOrigen || "N/A"})</span>
                 <button className="editar" onClick={() => handleEditar(tipo)}>Editar</button>
-                <button className="eliminar" onClick={() => handleEliminar(tipo.id)}>Eliminar</button>
+                <button className="eliminar" onClick={() => {
+                  setIdAEliminar(tipo.id);
+                  setConfirmarAbierto(true);
+                }}>Eliminar</button>
               </>
             )}
           </li>
@@ -177,7 +188,46 @@ function ListaTipoComida() {
       <ModalMensaje
         abierto={modalAbierto}
         mensaje={modalMensaje}
-        onClose={() => setModalAbierto(false)}
+        onClose={() => {
+          setModalAbierto(false);
+          obtenerTipos(); // Ahora sí, actualiza la lista después de cerrar el modal
+        }}
+      />
+      <ModalMensaje
+        abierto={confirmarAbierto}
+        mensaje="¿Eliminar este tipo de restaurante?"
+        onClose={() => setConfirmarAbierto(false)}
+        botones={
+          <>
+            <button
+              className="ModalMensaje-boton"
+              onClick={() => {
+                setConfirmarAbierto(false);
+                // Aquí sí llamas a la eliminación real:
+                if (idAEliminar !== null) {
+                  axios.delete(`${ENDPOINTS.TIPO_COMIDA}/${idAEliminar}`)
+                    .then(() => {
+                      setModalMensaje("Tipo de restaurante eliminado correctamente.");
+                      setModalAbierto(true);
+                      setIdAEliminar(null);
+                    });
+                }
+              }}
+            >
+              Aceptar
+            </button>
+            <button
+              className="ModalMensaje-boton"
+              style={{ background: "#444" }}
+              onClick={() => {
+                setConfirmarAbierto(false);
+                setIdAEliminar(null);
+              }}
+            >
+              Cancelar
+            </button>
+          </>
+        }
       />
     </div>
   );

@@ -1,0 +1,104 @@
+.Navegador {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  background: #23262f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 64px;
+  box-shadow: 0 2px 12px rgba(44,62,80,0.10);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+.Navegador-logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  letter-spacing: -1px;
+  cursor: pointer;
+  user-select: none;
+  color: var(--color-primary, #5e72e4);
+  transition: color 0.2s;
+  white-space: nowrap;
+}
+.Navegador-logo:hover {
+  color: var(--color-accent, #7f53ac);
+}
+
+.Navegador-links {
+  display: flex;
+  gap: 24px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+.Navegador-links a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 1.08rem;
+  font-weight: 500;
+  padding: 8px 0;
+  border-bottom: 2px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+  white-space: nowrap;
+}
+.Navegador-links a:hover {
+  color: var(--color-primary, #5e72e4);
+  border-bottom: 2px solid var(--color-primary, #5e72e4);
+}
+
+.Navegador-auth {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.Navegador-btn {
+  background: var(--color-primary, #5e72e4);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+  white-space: nowrap;
+}
+.Navegador-btn:hover {
+  background: var(--color-accent, #7f53ac);
+  color: #fff;
+}
+.Navegador-btn.secundario {
+  background: #444;
+  color: #fff;
+}
+.Navegador-btn.secundario:hover {
+  background: var(--color-primary, #5e72e4);
+}
+
+@media (max-width: 900px) {
+  .Navegador {
+    flex-direction: column;
+    height: auto;
+    padding: 12px 8px;
+    gap: 10px;
+    max-width: 100vw;
+  }
+  .Navegador-links {
+    gap: 12px;
+    justify-content: center;
+    width: 100%;
+  }
+  .Navegador-auth {
+    gap: 8px;
+    justify-content: center;
+    width: 100%;
+  }
+}

@@ -7,10 +7,11 @@ import Inicio from './Componentes/Inicio';
 import ActualizarRestaurante from './Componentes/ActualizarRestaurante';
 import Login from './Componentes/Login';
 import Register from './Componentes/Register';
+import ListaTipoComida from "./Componentes/ListaTipoComida";
+import Navegador from "./Componentes/Navegador";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ENDPOINTS } from './config/endpoints';
-import ListaTipoComida from "./Componentes/ListaTipoComida";
 
 function App() {
   const [auth, setAuth] = useState({
@@ -89,32 +90,30 @@ function App() {
 
   // Rutas protegidas
   const PrivateRoute = ({ children }) => {
-    return auth.token ? children : <Navigate to="/login" />;
+    const token = localStorage.getItem("token");
+    return token ? children : <Navigate to="/login" />;
   };
 
   return (
     <div className="App">
       <BrowserRouter>
+        <Navegador />
         <Routes>
           <Route path="/" element={<Inicio />} />
           <Route path="/login" element={<Login setAuth={setAuth} />} />
           <Route path="/register" element={<Register />} />
-          <Route path='/crear' element={
-            <PrivateRoute>
-              <CrearRestaurante
-                state={state}
-                setState={setState}
-                agregarRestaurante={agregarRestaurante}
-              />
-            </PrivateRoute>
-          } />
+          <Route path="/tipos" element={<ListaTipoComida />} />
+          <Route
+            path='/crear'
+            element={
+              <PrivateRoute>
+                <CrearRestaurante agregarRestaurante={agregarRestaurante} />
+              </PrivateRoute>
+            }
+          />
           <Route path='/actualizar/:id' element={
             <PrivateRoute>
-              <ActualizarRestaurante
-                state={state}
-                setState={setState}
-                actualizarRestaurante={actualizarRestaurante}
-              />
+              <ActualizarRestaurante actualizarRestaurante={actualizarRestaurante} />
             </PrivateRoute>
           } />
           <Route
@@ -124,13 +123,11 @@ function App() {
                 <ListaRestaurantes
                   restaurantes={restaurantes}
                   handleEliminar={eliminarRestaurante}
-                  obtenerRestaurantes={obtenerRestaurantes}
                 />
               </PrivateRoute>
             }
           />
           <Route path="/axios" element={<ComponenteAxios />} />
-          <Route path="/tipos" element={<ListaTipoComida />} />
         </Routes>
       </BrowserRouter>
     </div>
@@ -138,5 +135,4 @@ function App() {
 }
 
 export default App;
-
 
