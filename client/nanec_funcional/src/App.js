@@ -10,6 +10,7 @@ import Register from './Componentes/Register';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { ENDPOINTS } from './config/endpoints';
+import ListaTipoComida from "./Componentes/ListaTipoComida";
 
 function App() {
   const [auth, setAuth] = useState({
@@ -129,6 +130,7 @@ function App() {
             }
           />
           <Route path="/axios" element={<ComponenteAxios />} />
+          <Route path="/tipos" element={<ListaTipoComida />} />
         </Routes>
       </BrowserRouter>
     </div>

@@ -1,0 +1,148 @@
+@import '../theme.css';
+
+.TipoComidaContainer {
+  max-width: 480px;
+  margin: 40px auto;
+  background: var(--color-surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.TipoComidaContainer h2 {
+  color: var(--color-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 24px;
+  text-align: center;
+  text-shadow: 0 2px 8px rgba(20,20,30,0.10);
+}
+
+.TipoComidaForm {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  width: 100%;
+  margin-bottom: 24px;
+  background: #23262f;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(94,114,228,0.10);
+  padding: 18px 14px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.TipoComidaForm input {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 14px 16px;
+  border-radius: 10px;
+  border: 1.5px solid #3a3e4a;
+  background: #2e3240;
+  color: var(--color-text);
+  font-size: 1.08rem;
+  font-weight: 500;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.TipoComidaForm input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary);
+  outline: none;
+}
+
+.TipoComidaForm button {
+  flex-shrink: 0;
+  height: 44px;
+  padding: 0 24px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 1.08rem;
+  cursor: pointer;
+  transition: background var(--transition), transform 0.15s;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+  margin-left: 0;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.TipoComidaForm button:hover {
+  background: var(--color-accent);
+  transform: scale(1.04);
+}
+
+.TipoComidaLista {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+}
+
+.TipoComidaItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #23262f;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 8px rgba(44,62,80,0.08);
+}
+
+.TipoComidaNombre {
+  flex: 1;
+  color: var(--color-text);
+  font-size: 1.08rem;
+  font-weight: 500;
+}
+
+.TipoComidaInputEdit {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid var(--color-primary);
+  background: #2e3240;
+  color: var(--color-text);
+  font-size: 1rem;
+}
+
+.TipoComidaItem button {
+  margin-left: 4px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 0.98rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--transition);
+}
+
+.TipoComidaItem .editar {
+  background: var(--color-accent);
+  color: #fff;
+}
+.TipoComidaItem .eliminar {
+  background: var(--color-danger);
+  color: #fff;
+}
+.TipoComidaItem .guardar {
+  background: var(--color-primary);
+  color: #fff;
+}
+.TipoComidaItem .cancelar {
+  background: #444;
+  color: #fff;
+}
+
+.TipoComidaPais {
+  color: #aaa;
+  font-size: 0.98rem;
+  margin-left: 8px;
+}

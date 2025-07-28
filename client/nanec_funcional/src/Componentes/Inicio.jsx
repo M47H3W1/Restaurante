@@ -1,4 +1,5 @@
 import {useNavigate} from 'react-router-dom';
+import "./Inicio.css";
 //import { Link } from 'react-router-dom';
 function Inicio() {
     const navigate = useNavigate();
@@ -19,14 +20,9 @@ function Inicio() {
     <br />
     <button onClick={handleCrear}>Crear nuevo restaurante</button>
     <br />
-    {/*<p>Se utiliza Link</p>
-    <Link to="/lista">
-      <button>Ir a Restaurantes</button>
-    </Link>
-    <Link to="/crear">
-      <button>Crear Restaurante</button>
-    </Link>
-    */}
+    <button onClick={() => navigate("/tipos")}>Gestionar Tipos de Restaurante</button>
+    <br />
+
     </div>
   );
 }

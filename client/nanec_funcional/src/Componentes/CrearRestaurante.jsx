@@ -9,7 +9,7 @@ function CrearRestaurante (props){
     // Estado local para cada campo
     const [nombre, setNombre] = useState("");
     const [direccion, setDireccion] = useState("");
-    const [tipo, setTipo] = useState("");
+    const [tiposSeleccionados, setTiposSeleccionados] = useState([]); // Array para múltiples tipos
     const [reputacion, setReputacion] = useState("");
     const [UrlImagen, setUrlImagen] = useState("");
     const navigate = useNavigate();
@@ -19,6 +19,11 @@ function CrearRestaurante (props){
             .then(res => setTipos(res.data))
             .catch(err => setTipos([]));
     }, []);
+
+    const handleTiposChange = (e) => {
+        const selectedOptions = Array.from(e.target.selectedOptions).map(opt => opt.value);
+        setTiposSeleccionados(selectedOptions);
+    };
 
     const handlerInsertar = (e) => {
         e.preventDefault(); // <-- Esto previene el doble envío
@@ -37,19 +42,23 @@ function CrearRestaurante (props){
                     alert("No se pudo obtener el ID del restaurante creado. Revisa la respuesta del backend.");
                     throw new Error("ID de restaurante no encontrado en la respuesta");
                 }
-                const registroMenu = {
-                    restaurante_id: restauranteId,
-                    tipoComidaId: tipo
-                };
-                return axios.post(ENDPOINTS.MENU, registroMenu);
+                // Crea un registro de menú por cada tipo seleccionado
+                return Promise.all(
+                    tiposSeleccionados.map(tipoId =>
+                        axios.post(ENDPOINTS.MENU, {
+                            restaurante_id: restauranteId,
+                            tipoComidaId: tipoId
+                        })
+                    )
+                );
             })
             .then(() => {
-                alert("Restaurante y menú creados exitosamente");
+                alert("Restaurante y tipos creados exitosamente");
                 if (props.agregarRestaurante) props.agregarRestaurante({ nombre, direccion, reputacion, url: UrlImagen });
                 // Limpia los campos
                 setNombre("");
                 setDireccion("");
-                setTipo("");
+                setTiposSeleccionados([]);
                 setReputacion("");
                 setUrlImagen("");
             })
@@ -67,11 +76,15 @@ function CrearRestaurante (props){
             <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} />
             <label>Dirección:</label>
             <input type="text" value={direccion} onChange={e => setDireccion(e.target.value)} />
-            <label>Tipo:</label>
-            <select value={tipo} onChange={e => setTipo(e.target.value)}>
-                <option value="">Seleccione un tipo</option>
-                {tipos.map((tipo, idx) => (
-                    <option key={idx} value={tipo.id || tipo._id}>
+            <label>Tipos:</label>
+            <select
+                multiple
+                value={tiposSeleccionados}
+                onChange={handleTiposChange}
+                style={{ minHeight: "80px" }}
+            >
+                {tipos.map((tipo) => (
+                    <option key={tipo.id || tipo._id} value={tipo.id || tipo._id}>
                         {tipo.nombre || tipo.tipo || tipo}
                     </option>
                 ))}

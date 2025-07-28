@@ -1,0 +1,43 @@
+.ModalMensaje-overlay {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30, 32, 40, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.ModalMensaje-contenido {
+  background: #23262f;
+  color: #fff;
+  border-radius: 16px;
+  padding: 32px 28px 24px 28px;
+  box-shadow: 0 8px 32px rgba(94,114,228,0.18);
+  min-width: 320px;
+  max-width: 90vw;
+  text-align: center;
+  animation: fadeInUp 0.3s;
+}
+
+.ModalMensaje-texto {
+  font-size: 1.15rem;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+.ModalMensaje-boton {
+  background: var(--color-primary, #5e72e4);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 28px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.ModalMensaje-boton:hover {
+  background: var(--color-accent, #7f53ac);
+}

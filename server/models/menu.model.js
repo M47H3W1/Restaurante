@@ -9,15 +9,15 @@ const Menu = sequelize.define('Menu', {
         defaultValue: DataTypes.NOW,
         allowNull: false
     },
-    restaurante_id: { // clave foránea explícita
+    restaurante_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
             model: Restaurantes,
-            key: '_id'
+            key: 'id' // Cambiado de _id a id
         }
     },
-    tipoComidaId: { // clave foránea explícita
+    tipoComidaId: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {

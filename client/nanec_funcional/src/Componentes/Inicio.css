@@ -1,0 +1,23 @@
+.Inicio button {
+  min-width: 320px;
+  max-width: 100%;
+  padding: 14px 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  border-radius: 12px;
+  background: linear-gradient(90deg, #5e72e4 0%, #7f53ac 100%);
+  color: #fff;
+  border: none;
+  margin: 24px auto;
+  display: block;
+  box-shadow: 0 4px 24px rgba(20,20,30,0.13);
+  transition: background 0.2s, transform 0.2s;
+  white-space: normal;
+  word-break: break-word;
+  text-align: center;
+}
+
+.Inicio button:hover, .Inicio button:focus {
+  background: linear-gradient(90deg, #7f53ac 0%, #5e72e4 100%);
+  transform: scale(1.04);
+}

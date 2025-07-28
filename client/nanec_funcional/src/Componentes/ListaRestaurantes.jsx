@@ -70,17 +70,17 @@ function ListaRestaurantes({
       )}
       
       {restaurantes.map((restaurante, index) => (
-        <div className="RestauranteCard" key={restaurante._id || restaurante.id || index}>
+        <div className="RestauranteCard" key={restaurante.id || index}>
           <img src={restaurante.UrlImagen || restaurante.url} alt={restaurante.nombre} />
           <div className="RestauranteCard-content">
             <div className="RestauranteCard-header">
               <span className="RestauranteCard-nombre">{restaurante.nombre}</span>
-              <span className="RestauranteCard-tipo">{tiposPorRestaurante[restaurante._id || restaurante.id] || []}</span>
+              <span className="RestauranteCard-tipo">{tiposPorRestaurante[restaurante.id] || []}</span>
             </div>
             <div className="RestauranteCard-direccion">{restaurante.direccion}</div>
             <div className="RestauranteCard-reputacion">Reputación: ⭐⭐⭐</div>
             <div className="RestauranteCard-actions">
-              <button className="eliminar" onClick={() => handleEliminar(restaurante._id || restaurante.id)}>Eliminar</button>
+              <button className="eliminar" onClick={() => handleEliminar(restaurante.id)}>Eliminar</button>
               <button className="actualizar">Actualizar</button>
             </div>
             <div className="RestauranteCard-likes">

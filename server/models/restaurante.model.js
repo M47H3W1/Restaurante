@@ -2,7 +2,7 @@ const {DataTypes} = require("sequelize");
 const sequelize = require('../config/sequelize.config');
 
 const Restaurantes = sequelize.define("Restaurantes", {
-    _id:{
+    id: { // Cambiado de _id a id
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
@@ -42,10 +42,7 @@ const Restaurantes = sequelize.define("Restaurantes", {
                 msg: "La URL proporcionada no es válida"
             }
         }
-        
     }
-}
-,{ timestamps: false}
-);
+}, { timestamps: false });
 
 module.exports = Restaurantes;

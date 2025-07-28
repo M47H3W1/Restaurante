@@ -39,7 +39,7 @@ module.exports.getAllRestaurantes = async (_, response) => {
 
 module.exports.getRestaurante = async (request, response) => {
     try {
-        const restaurante = await Restaurantes.findOne({_id: request.params.id});
+        const restaurante = await Restaurantes.findOne({ where: { id: request.params.id } }); // Cambiado _id por id
         if (!restaurante) {
             return response.status(404).json({
                 status: "error",
@@ -56,12 +56,8 @@ module.exports.getRestaurante = async (request, response) => {
     }
 }
 
-//El user.Update retorna un vector, y el primer elemento es la cantidad de filas actualizadas
-//Ej: [0,....]
 module.exports.updateRestaurante = async (request, response) => {
-    
     const { nombre, direccion, reputacion, url } = request.body;
-
     try {
         const [updated] = await Restaurantes.update({
             nombre,
@@ -69,7 +65,7 @@ module.exports.updateRestaurante = async (request, response) => {
             reputacion,
             url
         }, {
-            where: { _id: request.params.id }
+            where: { id: request.params.id } // Cambiado _id por id
         });
 
         if (!updated) {
@@ -79,7 +75,7 @@ module.exports.updateRestaurante = async (request, response) => {
             });
         }
 
-        const updatedRestaurante = await Restaurantes.findOne({ where: { _id: id } });
+        const updatedRestaurante = await Restaurantes.findOne({ where: { id: request.params.id } }); // Cambiado _id por id
         response.json({
             status: "ok",
             message: "Restaurante actualizado correctamente",
@@ -98,7 +94,7 @@ module.exports.deleteRestaurante = async (request, response) => {
     const { id } = request.params;
 
     try {
-        const deleted = await Restaurantes.destroy({ where: { _id: id } });
+        const deleted = await Restaurantes.destroy({ where: { id } }); // Cambiado _id por id
 
         if (!deleted) {
             return response.status(404).json({
