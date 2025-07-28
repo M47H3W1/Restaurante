@@ -53,12 +53,23 @@ function App() {
       .catch(error => console.error('Error al agregar el restaurante:', error))
   };
   //Se elimina un restaurante del servidor
-  const eliminarRestauranteAxios = (id) => {
-    axios.delete(`${ENDPOINTS.RESTAURANTES}/${id}`)
-      .then(() => {
-        setRestaurantes(prev => prev.filter(restaurante => restaurante.id !== id));
-      })
-      .catch(error => console.error('Error al eliminar el restaurante:', error));
+  const eliminarRestaurante = async (id) => {
+    if (!id) {
+      console.error("ID de restaurante no válido:", id);
+      return;
+    }
+    
+    try {
+      console.log("Eliminando restaurante con ID:", id);
+      await axios.delete(`${ENDPOINTS.RESTAURANTES}/${id}`);
+      
+      // Actualizar la lista local después de eliminar
+      setRestaurantes(prev => prev.filter(r => (r.id || r._id) !== id));
+      
+      console.log("Restaurante eliminado exitosamente");
+    } catch (error) {
+      console.error("Error al eliminar restaurante:", error);
+    }
   };
 
   //Se actualiza un restaurante en el servidor
@@ -82,10 +93,6 @@ function App() {
 
   const agregarRestaurante = (nuevoRestaurante) => {
     agregarRestauranteAxios(nuevoRestaurante);
-  };
-
-  const eliminarRestaurante = (index) => {
-    eliminarRestauranteAxios(restaurantes[index].id);
   };
 
   // Rutas protegidas

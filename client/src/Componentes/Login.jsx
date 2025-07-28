@@ -18,7 +18,9 @@ function Login({ setAuth }) {
       setAuth({ user: res.data, token: res.data.token });
       setMensaje("");
       // Recarga la página para que se actualice el navegador
+      navigate("/");
       window.location.reload();
+      
     } catch (err) {
       setMensaje("Credenciales inválidas");
     }

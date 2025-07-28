@@ -19,18 +19,50 @@ function ListaRestaurantes({
   useEffect(() => {
     // Por cada restaurante, obtener sus tipos
     async function fetchTipos() {
+      if (restaurantes.length === 0) {
+        setTiposPorRestaurante({});
+        return;
+      }
+
       const tiposMap = {};
-      await Promise.all(restaurantes.map(async (restaurante) => {
-        try {
-          const res = await axios.get(`${ENDPOINTS.MENU}/restaurante/${restaurante._id || restaurante.id}`);
-          tiposMap[restaurante._id || restaurante.id] = res.data.map(tipo => tipo.nombre || tipo.tipo || tipo);
-        } catch (e) {
-          tiposMap[restaurante._id || restaurante.id] = [];
-        }
-      }));
+      
+      // Crear promesas para todos los restaurantes válidos
+      const promesas = restaurantes
+        .filter(restaurante => restaurante.id || restaurante._id) // Solo restaurantes con ID válido
+        .map(async (restaurante) => {
+          const restauranteId = restaurante._id || restaurante.id;
+          try {
+            const res = await axios.get(`${ENDPOINTS.MENU}`);
+            // Filtrar menús que pertenecen a este restaurante
+            const menusDelRestaurante = res.data.filter(menu => 
+              String(menu.restaurante_id || menu.restauranteId) === String(restauranteId)
+            );
+            
+            // Obtener los tipos de comida para estos menús
+            const tiposPromesas = menusDelRestaurante.map(async (menu) => {
+              try {
+                const tipoRes = await axios.get(`${ENDPOINTS.TIPO_COMIDA}/${menu.tipoComidaId}`);
+                return tipoRes.data.nombre || tipoRes.data.tipo || menu.tipoComidaId;
+              } catch (e) {
+                console.warn(`No se pudo obtener tipo ${menu.tipoComidaId}:`, e);
+                return `Tipo ${menu.tipoComidaId}`;
+              }
+            });
+            
+            const tipos = await Promise.all(tiposPromesas);
+            tiposMap[restauranteId] = tipos;
+          } catch (e) {
+            console.warn(`Error al obtener menús para restaurante ${restauranteId}:`, e);
+            tiposMap[restauranteId] = [];
+          }
+        });
+
+      // Ejecutar todas las promesas
+      await Promise.all(promesas);
       setTiposPorRestaurante(tiposMap);
     }
-    if (restaurantes.length > 0) fetchTipos();
+    
+    fetchTipos();
   }, [restaurantes]);
 
   // Función para generar las estrellas basadas en la reputación
@@ -82,7 +114,16 @@ function ListaRestaurantes({
 
   // Función para abrir el modal de confirmación
   const confirmarEliminar = (restaurante) => {
-    setIdAEliminar(restaurante.id || restaurante._id);
+    const id = restaurante.id || restaurante._id;
+    console.log("ID del restaurante a eliminar:", id); // Para debuggear
+    console.log("Restaurante completo:", restaurante); // Para debuggear
+    
+    if (!id) {
+      console.error("No se encontró ID válido para el restaurante:", restaurante);
+      return;
+    }
+    
+    setIdAEliminar(id);
     setNombreRestauranteEliminar(restaurante.nombre);
     setConfirmarAbierto(true);
   };
@@ -133,6 +174,12 @@ function ListaRestaurantes({
             <button
               className="ModalMensaje-boton"
               onClick={() => {
+                console.log("ID a eliminar en el modal:", idAEliminar); // Para debuggear
+                if (!idAEliminar) {
+                  console.error("ID a eliminar es null/undefined");
+                  return;
+                }
+                
                 setConfirmarAbierto(false);
                 handleEliminar(idAEliminar);
                 setIdAEliminar(null);
