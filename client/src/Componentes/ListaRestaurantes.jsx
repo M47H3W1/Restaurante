@@ -254,46 +254,52 @@ function ListaRestaurantes({
         </div>
       </div>
       
-      {restaurantesFiltrados.map((restaurante, index) => (
-        <div className="RestauranteCard" key={restaurante.id || restaurante._id || index}>
-          <img src={restaurante.UrlImagen || restaurante.url} alt={restaurante.nombre} />
-          <div className="RestauranteCard-content">
-            <div className="RestauranteCard-header">
-              <span className="RestauranteCard-nombre">{restaurante.nombre}</span>
-              
-              {/* Contenedores individuales para cada tipo */}
-              <div className="RestauranteCard-tipos">
-                {(tiposPorRestaurante[restaurante.id || restaurante._id] || []).map((tipo, tipoIndex) => (
-                  <span 
-                    key={tipoIndex} 
-                    className={`RestauranteCard-tipo tipo-${tipoIndex % 6}`}
-                  >
-                    {tipo}
-                  </span>
-                ))}
-              </div>
-            </div>
-            <div className="RestauranteCard-direccion">{restaurante.direccion}</div>
-            <div className="RestauranteCard-reputacion">
-              Reputación: {generarEstrellas(restaurante.reputacion)} ({restaurante.reputacion}/5)
-            </div>
-            
-            {/* Solo mostrar botones de acción si está autenticado */}
-            {isAuthenticated() && (
-              <div className="RestauranteCard-actions">
-                <button className="eliminar" onClick={() => confirmarEliminar(restaurante)}>Eliminar</button>
-                <button className="actualizar" onClick={() => navigate(`/actualizar/${restaurante.id || restaurante._id}`)}>Actualizar</button>
-              </div>
-            )}
-            
-            <div className="RestauranteCard-likes">
-              <button className="like-btn" onClick={SumarLikes}>👍</button>
-              <button className="dislike-btn" onClick={RestarLikes}>👎</button>
-              <span>Likes: {likes}</span>
-            </div>
+      {restaurantesFiltrados.length === 0 ? (
+  <div style={{ color: "#fff", fontWeight: 600, margin: "32px 0", fontSize: "1.2rem" }}>
+    Ups, sentimos que no tenemos restaurantes de este tipo.
+  </div>
+) : (
+  restaurantesFiltrados.map((restaurante, index) => (
+    <div className="RestauranteCard" key={restaurante.id || restaurante._id || index}>
+      <img src={restaurante.UrlImagen || restaurante.url} alt={restaurante.nombre} />
+      <div className="RestauranteCard-content">
+        <div className="RestauranteCard-header">
+          <span className="RestauranteCard-nombre">{restaurante.nombre}</span>
+          
+          {/* Contenedores individuales para cada tipo */}
+          <div className="RestauranteCard-tipos">
+            {(tiposPorRestaurante[restaurante.id || restaurante._id] || []).map((tipo, tipoIndex) => (
+              <span 
+                key={tipoIndex} 
+                className={`RestauranteCard-tipo tipo-${tipoIndex % 6}`}
+              >
+                {tipo}
+              </span>
+            ))}
           </div>
         </div>
-      ))}
+        <div className="RestauranteCard-direccion">{restaurante.direccion}</div>
+        <div className="RestauranteCard-reputacion">
+          Reputación: {generarEstrellas(restaurante.reputacion)} ({restaurante.reputacion}/5)
+        </div>
+        
+        {/* Solo mostrar botones de acción si está autenticado */}
+        {isAuthenticated() && (
+          <div className="RestauranteCard-actions">
+            <button className="eliminar" onClick={() => confirmarEliminar(restaurante)}>Eliminar</button>
+            <button className="actualizar" onClick={() => navigate(`/actualizar/${restaurante.id || restaurante._id}`)}>Actualizar</button>
+          </div>
+        )}
+        
+        <div className="RestauranteCard-likes">
+          <button className="like-btn" onClick={SumarLikes}>👍</button>
+          <button className="dislike-btn" onClick={RestarLikes}>👎</button>
+          <span>Likes: {likes}</span>
+        </div>
+      </div>
+    </div>
+  ))
+)}
 
       <ModalMensaje
         abierto={confirmarAbierto}
