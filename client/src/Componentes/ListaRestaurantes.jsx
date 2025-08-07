@@ -193,7 +193,13 @@ function ListaRestaurantes({
           options={opcionesTipos}
           isMulti
           placeholder="Buscar o seleccionar tipo..."
-          value={opcionesTipos.filter(opt => tiposSeleccionados.includes(opt.value))}
+          value={tipos
+  .filter(tipo => tiposSeleccionados.includes(String(tipo.id || tipo._id)))
+  .map(tipo => ({
+    value: String(tipo.id || tipo._id),
+    label: tipo.nombre || tipo.tipo
+  }))
+}
           onChange={selected => {
             setTiposSeleccionados(selected ? selected.map(opt => opt.value) : []);
           }}

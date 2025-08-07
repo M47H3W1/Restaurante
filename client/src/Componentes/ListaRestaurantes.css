@@ -260,13 +260,7 @@
   padding: 6px 12px !important;
 }
 .react-select__multi-value {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-  border-radius: 20px !important;
-  color: #fff !important;
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin: 2px 4px 2px 0;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  display: none !important;
 }
 .react-select__multi-value__label {
   color: #fff !important;
@@ -325,6 +319,12 @@
 .react-select__placeholder {
   color: #aaa !important;
   font-size: 1rem;
+}
+.react-select__input,
+.react-select__input input {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important; /* Para Chrome y Safari */
+  caret-color: #fff !important;
 }
 
 @media (max-width: 800px) {
