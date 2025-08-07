@@ -24,9 +24,8 @@ const sequelize = new Sequelize(bdd_name, username, password, {
 //Con el alter:true se actualizan las tablas existentes sin perder los datos, pero puede causar problemas si hay cambios incompatibles (Hace el mejor intento de mantener los datos)
 //Lo recomendable en el desarrollo es usar force true
 //En producción no se debe utilizar ninguno.
-
-//sequelize.sync({ force: true }).then(() => {
-sequelize.sync().then(() => {
+sequelize.sync({ force: true }).then(() => {
+//sequelize.sync().then(() => {
     console.log("Base de datos sincronizada");
 }).catch((error) => {
     console.error("Error al sincronizar la base de datos", error);
