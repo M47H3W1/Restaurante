@@ -105,6 +105,18 @@ function CrearRestaurante (props){
                 <input type="number" value={reputacion} onChange={e => setReputacion(e.target.value)} />
                 <label>URL Imagen:</label>
                 <input type="text" value={UrlImagen} onChange={e => setUrlImagen(e.target.value)} />
+
+                {/* Previsualización de la imagen */}
+                {UrlImagen && (
+                    <div className="FormularioRestaurante-preview">
+                        <img
+                            src={UrlImagen}
+                            alt="Previsualización"
+                            className="FormularioRestaurante-imagen"
+                            onError={e => { e.target.style.display = 'none'; }}
+                        />
+                    </div>
+                )}
                 <button type="submit">Insertar</button>
             </form>
             <ModalMensaje
