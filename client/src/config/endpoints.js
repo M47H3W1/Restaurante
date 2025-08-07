@@ -7,6 +7,7 @@ export const ENDPOINTS = {
   USERS: `${BASE_URL}/usuarios`,
   LOGIN: `${BASE_URL}/usuarios/login`,
   REGISTER: `${BASE_URL}/usuarios/register`
+  
 };
 
 export default ENDPOINTS;

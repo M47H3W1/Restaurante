@@ -4,6 +4,7 @@ import axios from "axios";
 import { ENDPOINTS } from '../config/endpoints';
 import './ListaRestaurantes.css';
 import ModalMensaje from './ModalMensaje';
+import Select from 'react-select';
 
 function ListaRestaurantes({
   restaurantes, 
@@ -15,6 +16,12 @@ function ListaRestaurantes({
   const [confirmarAbierto, setConfirmarAbierto] = useState(false);
   const [idAEliminar, setIdAEliminar] = useState(null);
   const [nombreRestauranteEliminar, setNombreRestauranteEliminar] = useState("");
+
+  const [tipos, setTipos] = useState([]);
+  const [tiposSeleccionados, setTiposSeleccionados] = useState([]);
+  const [tipoAAgregar, setTipoAAgregar] = useState(""); // Nuevo estado
+  const [restaurantesFiltrados, setRestaurantesFiltrados] = useState(restaurantes);
+  const [busquedaTipo, setBusquedaTipo] = useState(""); // Nuevo estado para búsqueda
 
   useEffect(() => {
     // Por cada restaurante, obtener sus tipos
@@ -131,6 +138,35 @@ function ListaRestaurantes({
     return localStorage.getItem("token");
   };
 
+  // Obtener tipos de comida
+  useEffect(() => {
+    axios.get(ENDPOINTS.TIPO_COMIDA)
+      .then(res => setTipos(res.data))
+      .catch(() => setTipos([]));
+  }, []);
+
+  // Filtrar restaurantes cuando cambian los tipos seleccionados
+  useEffect(() => {
+    if (tiposSeleccionados.length === 0) {
+      setRestaurantesFiltrados(restaurantes);
+      return;
+    }
+    axios.get(`http://localhost:8000/restaurantesByTipos?tipos=${tiposSeleccionados.join(',')}`)
+      .then(res => setRestaurantesFiltrados(res.data))
+      .catch(() => setRestaurantesFiltrados([]));
+  }, [tiposSeleccionados, restaurantes]);
+
+  // Opciones para el select de tipos
+  const opcionesTipos = tipos
+    .filter(tipo => !tiposSeleccionados.includes(String(tipo.id || tipo._id)))
+    .map(tipo => ({
+      value: String(tipo.id || tipo._id),
+      label: tipo.nombre || tipo.tipo
+    }));
+
+  // Para mostrar los chips seleccionados:
+  const tiposSeleccionadosObj = tipos.filter(t => tiposSeleccionados.includes(String(t.id || t._id)));
+
   return (
     <div className="ListaRestaurantes">
       <button onClick={handleInicio}>Volver al Inicio</button>
@@ -149,7 +185,70 @@ function ListaRestaurantes({
         <h2 style={{ color: "red" }}>{mensajeErrorLikesNegativos}</h2>
       )}
       
-      {restaurantes.map((restaurante, index) => (
+      {/* Nueva sección para filtrar por tipo de restaurante */}
+      <div style={{ width: "100%", marginBottom: 16 }}>
+        <label style={{ fontWeight: 600 }}>Filtrar por tipo de restaurante:</label>
+        <Select
+          classNamePrefix="react-select"
+          options={opcionesTipos}
+          isMulti
+          placeholder="Buscar o seleccionar tipo..."
+          value={opcionesTipos.filter(opt => tiposSeleccionados.includes(opt.value))}
+          onChange={selected => {
+            setTiposSeleccionados(selected ? selected.map(opt => opt.value) : []);
+          }}
+          styles={{
+            container: base => ({ ...base, width: 250, marginLeft: 12, marginBottom: 8 }),
+            menu: base => ({ ...base, zIndex: 9999 })
+          }}
+          noOptionsMessage={() => "Sin resultados"}
+          isClearable={false}
+          closeMenuOnSelect={false}
+        />
+        <div style={{ marginTop: 8 }}>
+          {tiposSeleccionadosObj.map((tipo, idx) => (
+            <span
+              key={tipo.id || tipo._id}
+              className={`RestauranteCard-tipo tipo-${idx % 6}`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                marginRight: "8px",
+                marginBottom: "4px",
+                padding: "6px 14px 6px 14px",
+                borderRadius: "20px",
+                fontSize: "15px",
+                position: "relative"
+              }}
+            >
+              {tipo.nombre || tipo.tipo}
+              <span
+                style={{
+                  marginLeft: "8px",
+                  cursor: "pointer",
+                  fontWeight: "bold",
+                  color: "#fff",
+                  background: "#e57373",
+                  borderRadius: "50%",
+                  width: "20px",
+                  height: "20px",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  justifyContent: "center"
+                }}
+                title="Quitar filtro"
+                onClick={() => {
+                  setTiposSeleccionados(tiposSeleccionados.filter(id => id !== String(tipo.id || tipo._id)));
+                }}
+              >
+                ×
+              </span>
+            </span>
+          ))}
+        </div>
+      </div>
+      
+      {restaurantesFiltrados.map((restaurante, index) => (
         <div className="RestauranteCard" key={restaurante.id || restaurante._id || index}>
           <img src={restaurante.UrlImagen || restaurante.url} alt={restaurante.nombre} />
           <div className="RestauranteCard-content">

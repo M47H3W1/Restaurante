@@ -240,6 +240,93 @@
   background: #b3001b;
 }
 
+/* Estilos para react-select */
+.react-select__control {
+  background: #23262f !important;
+  border: 2px solid #5e72e4 !important;
+  border-radius: 16px !important;
+  min-height: 44px !important;
+  box-shadow: 0 2px 8px rgba(94,114,228,0.10);
+  color: var(--color-text) !important;
+  font-size: 1rem !important;
+  font-weight: 500;
+  transition: border-color 0.2s;
+}
+.react-select__control--is-focused {
+  border-color: #7f53ac !important;
+  box-shadow: 0 0 0 2px #7f53ac33 !important;
+}
+.react-select__value-container {
+  padding: 6px 12px !important;
+}
+.react-select__multi-value {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+  border-radius: 20px !important;
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin: 2px 4px 2px 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+}
+.react-select__multi-value__label {
+  color: #fff !important;
+  padding: 0 8px !important;
+}
+.react-select__multi-value__remove {
+  color: #fff !important;
+  background: #e57373 !important;
+  border-radius: 50% !important;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 4px;
+  transition: background 0.2s;
+  cursor: pointer;
+}
+.react-select__multi-value__remove:hover {
+  background: #c62828 !important;
+  color: #fff !important;
+}
+.react-select__menu {
+  background: #23262f !important;
+  border-radius: 14px !important;
+  box-shadow: 0 8px 32px rgba(94,114,228,0.16);
+  color: var(--color-text) !important;
+  z-index: 100;
+}
+.react-select__option {
+  background: transparent !important;
+  color: var(--color-text) !important;
+  font-size: 1rem;
+  padding: 10px 16px !important;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.react-select__option--is-focused {
+  background: #5e72e4 !important;
+  color: #fff !important;
+}
+.react-select__option--is-selected {
+  background: linear-gradient(90deg, #5e72e4 0%, #7f53ac 100%) !important;
+  color: #fff !important;
+}
+.react-select__indicator-separator {
+  display: none !important;
+}
+.react-select__dropdown-indicator {
+  color: #7f53ac !important;
+  transition: color 0.2s;
+}
+.react-select__dropdown-indicator:hover {
+  color: #5e72e4 !important;
+}
+.react-select__placeholder {
+  color: #aaa !important;
+  font-size: 1rem;
+}
+
 @media (max-width: 800px) {
   .RestauranteCard {
     flex-direction: column;
