@@ -141,6 +141,53 @@ module.exports.getRestaurantesByTipoComida = async (request, response) => {
     }
 }
 
+// Filtrar restaurantes por uno o varios tipos de comida
+module.exports.getRestaurantesByTiposComida = async (request, response) => {
+    let tipos = request.query.tipos;
+    if (!tipos) {
+        return response.status(400).json({
+            status: "error",
+            message: "Debe proporcionar al menos un id de tipo de comida en el query ?tipos=1,2"
+        });
+    }
+    // Permitir recibir un solo valor o varios separados por coma
+    if (typeof tipos === "string") {
+        tipos = tipos.split(',').map(id => id.trim());
+    }
+    try {
+        // Validar que todos los tipos existan
+        const tiposExistentes = await TipoComida.findAll({ where: { id: tipos } });
+        if (tiposExistentes.length !== tipos.length) {
+            return response.status(404).json({
+                status: "error",
+                message: "Uno o más tipos de comida no existen"
+            });
+        }
+        // Buscar restaurantes que tengan al menos uno de los tipos indicados
+        const restaurantes = await Restaurantes.findAll({
+            include: [{
+                model: TipoComida,
+                where: { id: tipos },
+                attributes: []
+            }],
+            distinct: true
+        });
+        if (!restaurantes.length) {
+            return response.status(404).json({
+                status: "error",
+                message: "No se encontraron restaurantes para los tipos de comida solicitados"
+            });
+        }
+        response.json(restaurantes);
+    } catch (error) {
+        response.status(500).json({
+            status: "error",
+            message: "Error al filtrar los restaurantes",
+            error: error.message
+        });
+    }
+}
+
 // Obtener un menú por su id
 module.exports.getMenuById = async (request, response) => {
     try {

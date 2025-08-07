@@ -12,4 +12,5 @@ module.exports = function(app) {
     app.get("/menu/:id", MenuController.getMenuById);
     app.get("/menu/restaurante/:id", MenuController.getMenuByRestaurante);
     app.get("/api/v1/restaurantesByTipoC/:idTipoComida", MenuController.getRestaurantesByTipoComida);
+    app.get('/restaurantesByTipos', MenuController.getRestaurantesByTiposComida);
 }
